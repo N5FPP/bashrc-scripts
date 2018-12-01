@@ -4,6 +4,9 @@
 #  as standalone.
 #
 
+# $Id$
+# $Date$
+
 # echo output
 #set -x
 

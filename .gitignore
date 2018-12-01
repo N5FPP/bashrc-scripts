@@ -1,0 +1,7 @@
+# .gitignore
+
+# $Id$
+# $Date$
+
+.*.swp
+*.core

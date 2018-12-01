@@ -4,6 +4,9 @@
 #  project environments, but can be ran as standalone.
 #
 
+# $Id$
+# $Date$
+
 PROJECTS_DIR=/local/Projects
 
 export ANDROID_HOME=/opt/android-sdk-linux_x86

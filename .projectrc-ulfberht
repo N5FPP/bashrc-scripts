@@ -1,5 +1,8 @@
 # .project-${HOST} - Host specific project rc file
 
+# $Id$
+# $Date$
+
 if [ "$PS1" ]; then
   echo "    Sourcing project RC file .project_${HOST}..."
 fi

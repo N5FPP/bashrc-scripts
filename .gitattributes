@@ -1,0 +1,8 @@
+# .gitattributes
+
+# $Id$
+# $Date$
+
+.bash*		ident
+.projectrc*	ident
+*.txt		ident

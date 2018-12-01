@@ -3,6 +3,9 @@
 #	.bash_functions - useful function definitions...
 #
 
+# $Id$
+# $Date$
+
 # cpd - create backup of file(s) with date/time appended and our initials
 #
 cpd () {

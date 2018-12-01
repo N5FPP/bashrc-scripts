@@ -28,4 +28,4 @@ The PLATFORM tuple is defined as:
 
 	export PLATFORM=${OS}-${OS_REV}-${HOSTTYPE}
 
-
+# $Id$ $Date$

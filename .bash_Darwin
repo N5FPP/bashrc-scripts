@@ -1,5 +1,8 @@
 # .bashrc_Darwin
 
+# $Id$
+# $Date$
+
 export CATALINA_HOME=/Library/Tomcat
 export JAVA_HOME=/Library/Java/Home
 

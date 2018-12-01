@@ -1,5 +1,8 @@
-# $Id$
+# $File$
 #------------------------------------------------------------------------------
+
+# $Id$
+# $Date$
 
 if [ "${PS1}" ]; then
   echo Loading local project configuration for `hostname`...
