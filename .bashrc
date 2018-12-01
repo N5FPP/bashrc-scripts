@@ -4,8 +4,8 @@
 #  as standalone.
 #
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 # echo output
 #set -x

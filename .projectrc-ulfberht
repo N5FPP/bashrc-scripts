@@ -1,7 +1,7 @@
 # .project-${HOST} - Host specific project rc file
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 if [ "$PS1" ]; then
   echo "    Sourcing project RC file .project_${HOST}..."

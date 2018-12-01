@@ -1,7 +1,7 @@
 # .bashrc_Linux-2.x
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 export NODE_PATH=$(mkpath \
 	/opt/node/lib/node{,_modules}/ \

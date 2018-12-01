@@ -1,8 +1,8 @@
 # $File$
 #------------------------------------------------------------------------------
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 if [ "${PS1}" ]; then
   echo Loading local project configuration for `hostname`...
@@ -225,4 +225,4 @@ alias cmakeEclipse='cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=
 source ~/gnuradio/setup_env.sh 
 
 #------------------------------------------------------------------------------
-# $Id$
+# $CommitHashAbbreviated$

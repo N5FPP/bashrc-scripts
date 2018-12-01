@@ -1,7 +1,7 @@
 # .gitignore
 
 # $Id$
-# $Date$
+# $CommitterDateISO8601$
 
 .*.swp
 *.core

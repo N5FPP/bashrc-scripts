@@ -1,7 +1,7 @@
 # .bashrc_Darwin
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 export CATALINA_HOME=/Library/Tomcat
 export JAVA_HOME=/Library/Java/Home

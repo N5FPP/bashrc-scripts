@@ -4,8 +4,8 @@
 #  project environments, but can be ran as standalone.
 #
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 PROJECTS_DIR=/local/Projects
 

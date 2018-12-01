@@ -1,8 +1,8 @@
 # $File$
 #------------------------------------------------------------------------------
 
-# $Id$
-# $Date$
+# $CommitHashAbbreviated$
+# $CommitterDateISO8601$
 
 if [ "${PS1}" ]; then
   echo Loading local project configuration for `hostname`...
