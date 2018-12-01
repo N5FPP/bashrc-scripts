@@ -3,6 +3,6 @@
 # $Id$
 # $Date$
 
-.bash*		ident
-.projectrc*	ident
-*.txt		ident
+.bash*		filter=keywords
+.projectrc*	filter=keywords
+*.txt		filter=keywords
