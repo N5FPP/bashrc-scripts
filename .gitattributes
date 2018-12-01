@@ -1,6 +1,6 @@
 # .gitattributes
 
-# $Id$
+# $CommitHashAbbreviated$
 # $CommitterDateISO8601$
 
 .bash*		filter=keywords

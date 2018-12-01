@@ -1,4 +1,0 @@
-$Id$
-<FILE>
-<ID>
-<FILE>
