@@ -10,14 +10,14 @@ dropping them into place and restarting my login session.
 
 These scripts are executed in the following order:
 
-.bashrc
-	.bash_{PLATFORM tuple}
-	.bash_{HOST}
-	.projectrc
-		[.projectrc-{HOST}}
-	.bash_aliases
-	.bash_functions
-	.bash_completion	
+	.bashrc
+		.bash_{PLATFORM tuple}
+		.bash_{HOST}
+		.projectrc
+			[.projectrc-{HOST}}
+		.bash_aliases
+		.bash_functions
+		.bash_completion	
 
 
 The PLATFORM tuple is defined as:
