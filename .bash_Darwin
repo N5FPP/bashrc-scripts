@@ -1,0 +1,46 @@
+# .bashrc_Darwin
+
+export CATALINA_HOME=/Library/Tomcat
+export JAVA_HOME=/Library/Java/Home
+
+# Interactive stuff...
+#
+if [ "$PS1" ]; then
+
+  echo Loading OS specific configuration for ${OS}
+
+  # aliases...
+  #
+  alias      pa="ps auxww"
+  alias     psg="ps auxww | grep -v grep | grep"
+  alias psgetty="ps auxww | grep getty"
+  alias     zap='kill `ps auxww | grep -v grep | grep $* | cut -c10-15`'
+fi
+
+export MANPATH=`mkpath				\
+		${MANPATH}			\
+                /sw/share/man			\
+		`
+
+export INFOPATH=`mkpath				\
+		/sw/share/info			\
+		/sw/info			\
+		`
+
+export PERL5LIB=`mkpath				\
+		/sw/lib/perl5			\
+		/sw/lib/perl5/darwin		\
+		/usr/local/lib/perl5		\
+		${PERL5LIB}			\
+		`
+
+# read per-package scripts from /sw/etc/profile.d
+if [ -d /sw/etc/profile.d ]; then
+  for i in /sw/etc/profile.d/*.sh ; do
+    if [ -r $i -a -x $i ]; then
+      . $i
+    fi
+  done
+  unset i
+fi
+

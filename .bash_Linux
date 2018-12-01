@@ -1,0 +1,56 @@
+# .bashrc_Linux-2.x
+
+export NODE_PATH=$(mkpath \
+	/opt/node/lib/node{,_modules}/ \
+)
+
+# Shared library path
+#
+#export LD_LIBRARY_PATH=/usr/i486-linux-libc5/lib:${LD_LIBRARY_PATH}
+
+# Interactive stuff...
+#
+if [ "$PS1" ]; then
+
+  # aliases...
+  #
+  alias      pa="ps auxww"
+  alias     psg="pgrep -alfi"
+  alias psgetty="ps auxww | grep getty"
+
+
+  # RC management functions
+  #
+  if ! dpkg-query --status upstart >/dev/null 2>&1; then
+
+    init-rc() {
+      local command=$1; shift
+
+      for i in $*
+      do
+        if [ -f /etc/rc.d/init.d/${i} ]; then
+          sudo /etc/rc.d/init.d/${i} ${command}
+        else
+          echo "${command}: No such RC script, ${i}!"			2>&1
+        fi
+      done
+    }
+
+    start() {
+      init-rc start $*
+    }
+
+    restart() {
+      init-rc restart $*
+    }
+
+    stop() {
+      init-rc stop $*
+    }
+
+    status() {
+      init-rc status $*
+    }
+  fi
+
+fi

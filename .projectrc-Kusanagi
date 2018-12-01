@@ -1,0 +1,225 @@
+# $Id$
+#------------------------------------------------------------------------------
+
+if [ "${PS1}" ]; then
+  echo Loading local project configuration for `hostname`...
+fi
+
+#------------------------------------------------------------------------------
+# Project support
+
+if [ -z "${MYPROJECT}" -a -f ~/.myproject-${HOST} ]; then
+  export MYPROJECT=`cat ~/.myproject-${HOST}`
+fi
+
+if [ "${MYPROJECT}" ]; then
+  export PROJECT_HOME=${MYPROJECT:+${HOME}/Projects/${MYPROJECT}}
+fi
+
+if [ "${PS1}" ]; then
+  echo "Current project:  ${MYPROJECT:-NONE}"
+fi
+
+#------------------------------------------------------------------------------
+# Paths
+
+# My fundamental path - this stuff at the absolute front fo the path
+
+export MY_PATH=`mkpath							\
+	/usr/local/bin/							\
+	$HOME/bin/hosts							\
+	`
+
+export HOST_PATH=`mkpath						\
+	/Library/Tomcat/bin						\
+	/Library/Groovy/bin						
+	`
+
+# Package Configs
+
+export PKG_CONFIG_PATH=`mkpath						\
+	/usr/local/Cellar/libpng12/1.2.54/lib/pkgconfig			\
+	/usr/local/share/pkgconfig					\
+	/usr/local/lib/pkgconfig					\
+	/usr/local/opt/qt5/lib/pkgconfig				\
+	/usr/local/Library/ENV/pkgconfig				\
+	/usr/local/Library/Aliases/pkgconfig				\
+	/opt/X11/lib/pkgconfig						\
+	/opt/X11/share/pkgconfig					\
+	/usr/lib/pkgconfig						\
+	`
+
+# Golang
+
+export GOPATH=$HOME/Go
+export MY_PATH=`mkpath							\
+	${MY_PATH}							\
+	${GOPATH}/bin							\
+	`
+
+### # Tomcat/Catalina home
+### 
+### export CATALINA_HOME=/Library/Tomcat-4
+
+### # PVCS archive
+### 
+### export PVCSARCH=`findpath						\
+### 	/data/pvcs/projects/archives					\
+### 	`
+### # rsync/cvs settings
+### 
+### export RSYNC_RSH=/usr/bin/ssh
+### 
+### #export CVSROOT=":pserver:pascal@capablanca:/home/source_repository"
+### export CVSROOT=":ext:pascal@capablanca.rhinocorps.com:/home/source_repository"
+### export CVS_RSH=/usr/bin/ssh
+### export CVS_SERVER=cvs
+
+# Java paths
+
+export JAVA_HOME=`findpath						\
+	$([ -f ~/.jdk-${MYPROJECT} ] && cat ~/.jdk-${MYPROJECT})	\
+	$([ -f ~/.jdk-${HOST} ]      && cat ~/.jdk-${HOST})		\
+	/Library/Java/Home						\
+`
+#	$(ls -rd /usr/java/j2*[1-9])					\
+#` 
+
+if [ "${PS1}" ]; then
+  echo "Java home:  ${JAVA_HOME:-NONE}"
+fi
+
+# Perl library path
+
+export PERL5LIB=`mkfilepath						\
+	${MYPERL:+${MYPERL}/lib}					\
+	${MYPERL:+${MYPERL}/lib/site_perl}			\
+	/www/perl/lib{,/site_perl}					\
+`
+
+### # Oracle 9i settings
+### 
+### export ORACLE_BASE=/data/oracle
+### 
+### if [ -d "${ORACLE_BASE}" ]; then
+###   export ORACLE_HOME=/data/oracle/product/9.2.0.1.0
+###   export ORACLE_SID=CORRADO
+###   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib:$ORACLE_HOME/network/lib
+### fi
+
+# Development tools paths
+
+export PROJECT_PATH=`mkfilepath				\
+    	${PROJECT_HOME}/rhinocorps/bin          	\
+	${JAVA_HOME}/bin				\
+	/opt/*/bin					\
+	/opt/*						\
+`
+
+#export PROJECT_CLASSPATH=`mkfilepath		\
+#`
+
+#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:`mkfilepath			\
+#`
+
+# Build a CDPATH variable.
+#
+# The 'find' comand returns all directories under current project
+#
+export CDPATH=`mkpath					\
+	.                                               \
+	..                                              \
+	../..                                           \
+	../../..                                        \
+	$([ -d "${PROJECT_HOME}" ] && 
+		find ${PROJECT_HOME} -maxdepth 2 -type d | egrep -v '/(CVS|[rR]elease|scratch|tmp)') \
+	$([ -d ${HOME}/Projects ] && 
+		find ${HOME}/Projects -maxdepth 1 -type d | egrep -v '/(CVS|[rR]elease|scratch|tmp)') \
+	${HOME}/					\
+	${HOME}/Ham_Radio/Projects/			\
+	${HOME}/Ham_Radio/Projects/n5fpp/		\
+	`
+
+#------------------------------------------------------------------------------
+# Internet development support
+
+alias sudoRm='sudo rm -rf ./*'
+
+# GIT aliases
+alias gdh="git diff HEAD~1..HEAD"
+
+# CVS aliases
+
+#alias  A="cvs     add"
+#alias Ab="cvs     add      -kb"
+alias An="cvs     annotate"
+alias Ci="cvs     commit"
+alias Co="cvs     checkout"
+alias  D="cvs     diff     -cw"
+alias  E="cvs     export"
+alias Nu="cvs -qn update   -d"
+alias  T="cvs     tag"
+alias  U="cvs -q  update   -d"
+alias  L="cvs     log"
+
+A() {
+  cvs add $@
+  cvs ci -m "Initial check-in" $@
+}
+
+Ab() {
+  cvs add -kb $@
+  cvs ci -m "Initial check-in" $@
+}
+
+# Perl aliases
+
+alias Pd="perl -d"
+alias Pc="perl -c"
+alias Pv="perl -V"
+
+useproject() {
+  if [ $# -ne 1 ]; then
+    echo 'Usage: useproject {project id}'				1>&2
+  fi
+
+  export MYPROJECT=$1
+
+  exec $SHELL
+}
+
+
+setproject() {
+  if [ $# -ne 1 ]; then
+    echo 'Usage: setproject {project id}'				1>&2
+  fi
+
+  echo $1 > ~/.myproject-${HOST}
+
+  unset MYPROJECT
+
+  exec $SHELL
+}
+
+pcd() {
+  pushd ${PROJECT_HOME}/${1:+/$1}
+}
+
+# Look at the current Tomcat log
+
+ll () {   
+  datestamp=`date +"%Y-%m-%d"`;   
+  less /Library/Tomcat/logs/localhost_log.${datestamp}.txt; 
+}
+
+alias cmakeEclipse='cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../'
+
+#------------------------------------------------------------------------------
+
+[ -f ${PROJECT_HOME}/rhinocorps/etc/projectrc.bash ] \
+  && source ${PROJECT_HOME}/rhinocorps/etc/projectrc.bash
+
+source ~/gnuradio/setup_env.sh 
+
+#------------------------------------------------------------------------------
+# $Id$

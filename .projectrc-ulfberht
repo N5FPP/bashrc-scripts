@@ -1,0 +1,13 @@
+# .project-${HOST} - Host specific project rc file
+
+if [ "$PS1" ]; then
+  echo "    Sourcing project RC file .project_${HOST}..."
+fi
+
+#export GOROOT=/usr/lib/go
+export GOROOT=/local/go
+export GOPATH=$HOME/go
+export MY_PATH=$GOROOT/bin:$GOPATH/bin
+
+alias cfpga='picocom -b 115200 -d 8 -p n'
+

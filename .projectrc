@@ -1,0 +1,238 @@
+#  ~/.projectrc
+#
+#  This file is usually called by ~/.bashrc to setup local
+#  project environments, but can be ran as standalone.
+#
+
+PROJECTS_DIR=/local/Projects
+
+export ANDROID_HOME=/opt/android-sdk-linux_x86
+
+WORKSPACES=`mkpath $HOME/Workspaces`
+
+CDPATH=.:`mkpath \
+	${PROJECTS_DIR}/* \
+	${PROJECTS_DIR}/n5fpp/* \
+	${WORKSPACES} \
+	${CDPATH} \
+`
+
+export MY_PATH=`mkpath \
+	${PROJECTS_DIR}/bin \
+        /local/{*,*/*,*/*/*,*/*/*/*}/bin \
+	/opt/*/bin \
+	/opt/android-sdk-linux_x86/platform-tools/ \
+	/opt/android-sdk-linux_x86/tools/ \
+	/opt/CodeSourcery/Sourcery_G++_Lite/bin/ \
+	${MY_PATH} \
+`
+
+
+if [ "$PS1" ]; then
+
+    echo Configuring projects...
+
+	function android-project() {
+		MY_PROJECT=${1:-beagle};
+		MY_ANDROID_PROJECT=${2:-rowboat/rowboat-froyo}
+
+# 		set - `pwd | perl -nle 'print $1, " ", $2 if m:^/local/Projects/(.*)/Android/(.*)$:'`
+
+
+		PS1="${MY_PROJECT:+[${MY_PROJECT} ${MY_ANDROID_PROJECT}] }\w\n${SSH_AGENT_PID:+* }\u@\h ${MYPROJECT:+[${MYPROJECT}] }<\#> "
+
+		if [ -d ${PROJECTS_DIR}/${MY_PROJECT} ]; then
+		    echo Configuring ${MY_PROJECT}...;
+
+	        PATH=`mkpath \
+				${PROJECTS_DIR}/${MY_PROJECT}/bin \
+			    ${PROJECTS_DIR}/${MY_PROJECT}/Android/bin \
+				${PROJECTS_DIR}/${MY_PROJECT}/Android/${MY_ANDROID_PROJECT}/prebuilt/linux-x86/toolchain/arm-eabi-4.4.0/bin \
+				/local/opt/android-sdk-linux_x86/tools \
+				/local/opt/eclipse \
+				`:${PATH};
+
+			# Unfortunately, the Android build environment must have CDPATH unset
+			unset CDPATH;
+
+			cd ${PROJECTS_DIR}/${MY_PROJECT}/Android/${MY_ANDROID_PROJECT}
+
+			source build/envsetup.sh
+
+		else
+			echo Project, ${MY_PROJECT}, not found.;
+		fi
+	}
+
+	# Auto-completion function for rc-project, returns available projects
+	# under the projects directory.
+	#
+	function available_android_project_completion(){
+		local cur=`_get_cword`
+		echo "cur        : $cur"			>> ~/tmp/run.log
+		echo "COMP_CWORD : $COMP_CWORD "		>> ~/tmp/run.log
+		echo "COMP_WORDS : ( ${COMP_WORDS[@]} )" 	>> ~/tmp/run.log
+
+		case "$COMP_CWORD" in
+		  1 ) COMPREPLY=( $( shopt -s nullglob 
+                                     cd ${PROJECTS_DIR} \
+                                        && compgen -W "$( echo */Android/ )" -- ${cur} \
+                                             | sed -e 's:/Android/::g' ) )
+		  	  ;;
+                  2 ) COMPREPLY=( $( shopt -s nullglob 
+                                     cd ${PROJECTS_DIR}/${COMP_WORDS[1]}/Android/ \
+                                        && compgen -W "$( echo */.repo/ */*/.repo/ )" -- ${cur} \
+                                             | sed -e 's:/.repo/::g' ) )
+		      ;;
+		esac
+
+		echo "COMPREPLY : ( ${COMPREPLY[@]} )" 		>> ~/tmp/run.log
+	}
+
+	complete -F available_android_project_completion android-project
+
+	function chromiumos-project() {
+		MY_PROJECT=$1;
+
+		PS1="${MY_PROJECT:+[${MY_PROJECT}] }\w\n${SSH_AGENT_PID:+* }\u@\h ${MYPROJECT:+[${MYPROJECT}] }<\#> "
+
+		if [ -d ${PROJECTS_DIR}/${MY_PROJECT} ]; then
+		    echo Configuring ${MY_PROJECT}...;
+
+	        PATH=`mkpath \
+				${PROJECTS_DIR}/${MY_PROJECT}/bin \
+				${PROJECTS_DIR}/depot_tools \
+				/local/opt/eclipse \
+				`:${PATH};
+
+			# Unfortunately, the Android build environment must have CDPATH unset
+			unset CDPATH;
+
+			export GYP_DEFINES=target_arch=x64
+			export GYP_GENERATORS=make
+
+			cd ${PROJECTS_DIR}/${MY_PROJECT}/Chromium-OS
+		else
+			echo Project, ${MY_PROJECT}, not found.;
+		fi
+	}
+
+	# Auto-completion function for chromiumos-project, returns available projects
+	# under the projects directory.
+	#
+	function available_chromiumos_project_completion(){
+		local cur=`_get_cword`
+		COMPREPLY=( $( cd ${PROJECTS_DIR} && compgen -d $cur ) )
+	}
+
+	complete -F available_chromiumos_project_completion chromiumos-project
+
+	# Configure environment for the specified project.
+	#
+	#	- Updates shell prompt to reflect current project.
+	#	- Updates shell path to include any project specific executables.
+	#	- Updates the CDPATH to commonly known directories.
+	#	- Changes directory to the selected project.
+	#
+    function oe-project() {
+        MY_PROJECT=$1;
+
+		PS1="${MY_PROJECT:+[${MY_PROJECT}] }\w\n${SSH_AGENT_PID:+* }\u@\h ${MYPROJECT:+[${MYPROJECT}] }<\#> "
+
+		if [ -d ${PROJECTS_DIR}/${MY_PROJECT} ]; then
+		    echo Configuring ${MY_PROJECT}...;
+
+			PATH=`echo "$PATH" | perl -pe 's#\:*\.(?!\w+)\:*##g'`
+
+	        PATH=`mkpath \
+				${PROJECTS_DIR}/${MY_PROJECT}/bin \
+				${PROJECTS_DIR}/${MY_PROJECT}/Angstrom/setup-scripts \
+				${PROJECTS_DIR}/${MY_PROJECT}/Angstrom/setup-scripts/sources/bitbake/bin/ \
+				${PROJECTS_DIR}/${MY_PROJECT}/Angstrom/setup-scripts/sources/openembedded-core/scripts \
+				`:${PATH};
+
+			[ ! -z "${CDPATH}" ] && echo Unsetting CDPATH && unset CDPATH
+
+			cd ${PROJECTS_DIR}/${MY_PROJECT}/Angstrom/setup-scripts
+
+			[ -f ~/.oe/environment-oecore ] && source ~/.oe/environment-oecore
+		else
+			echo Project, ${MY_PROJECT}, not found.;
+		fi
+    }
+
+	# Auto-completion function for rc-project, returns available projects
+	# under the projects directory.
+	#
+	function available_oe_project_completion(){
+		local cur=`_get_cword`
+#		echo "cur        : $cur"			        >&2
+#		echo "COMP_CWORD : $COMP_CWORD "		    >&2
+#		echo "COMP_WORDS : ( ${COMP_WORDS[@]} )" 	>&2
+
+#		COMPREPLY=( $( cd ${PROJECTS_DIR} && compgen -d $cur ) )
+
+		COMPREPLY=( $( shopt -s nullglob 
+                cd ${PROJECTS_DIR} \
+                    && compgen -W "$( echo */Angstrom/setup-scripts/ )" -- ${cur} \
+                    | sed -e 's:/Angstrom/setup-scripts/::g' ) )
+
+#		echo "COMPREPLY : ( ${COMPREPLY[@]} )" 		>&2
+	}
+
+	complete -F available_oe_project_completion oe-project
+
+	# Load a specific project profile for OpenEmbedded.
+	#
+	function oe-profile() {
+	    local profile=$1;
+
+		export OE_PROJECT_DIR=${PROJECTS_DIR}/${MY_PROJECT}/build
+		export OE_PROFILE_DIR=${OE_PROFILE_DIR}/profiles
+		export OE_WORK_DIR=${OE_PROJECT_DIR}/tmp/work
+		export OE_DEPLOY_DIR=${OE_PROJECT_DIR}/tmp/deploy
+		export OE_IMAGE_DIR=${OE_DEPLOY_DIR}/glibc/images
+		export OE_PKG_DIR=${OE_DEPLOY_DIR}/glibc/ipk
+		export OE_CROSS_COMPILE=${OE_PROJECT_DIR}/tmp/cross/armv7a/bin
+		export OE_STAGING_HOST=${OE_PROJECT_DIR}/tmp/staging/x86_64-linux
+
+		source ${PROJECTS_DIR}/${MY_PROJECT}/build/profiles/$1/profile.sh;
+
+		export ARCH=arm
+		export CROSS_COMPILE=${OE_CROSS_COMPILE}/arm-angstrom-linux-gnueabi-
+
+#		export PATH=${OE_CROSS_COMPILE}:${OE_STAGING_HOST}/usr/bin:${PATH}
+
+		cd ${OE_PROJECT_DIR}
+	}
+
+	# Auto-completion function for oe-profile, returns available profiles
+	# under a project build directory using OpenEmbeded.
+	#
+	function available_profile_completion() {
+		local cur=`_get_cword`
+
+		COMPREPLY=( $( cd ${PROJECTS_DIR}/${MY_PROJECT}/build/profiles && compgen -d $cur ) );
+
+	}
+
+	complete -F available_profile_completion oe-profile
+
+
+	# Copy contents between two similarly structured trees
+	# 
+	xcp () 	{ 
+	  local src=$1; shift;
+	  local dst=$1; shift;
+      local p=`pwd`;
+	  local d=${p/$src/$dst};
+
+      find $* | cpio -pudumv $d
+	}
+
+	alias oe-cp='xcp openembedded ${BUILD_NAME}'
+
+fi
+
+[ -f ~/.projectrc-${HOST} ] && source ~/.projectrc-${HOST}
+
