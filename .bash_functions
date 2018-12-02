@@ -46,6 +46,11 @@ e () {
 	|| vi $*
 }
 
+mcd() {
+  mkdir $1
+  cd $_
+}
+
 # manat - look for man page at specific man path...
 #
 manat() {
