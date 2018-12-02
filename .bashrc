@@ -113,6 +113,10 @@ function findfile () {
 #
 if [ -f ~/.bash_$PLATFORM ]; then
   source ~/.bash_$PLATFORM
+else
+  [ "$PS1" ] && echo Creating ~/.bash_${PLATFORM}...
+  ln -s ~/.bash_${OS} ~/.bash_${PLATFORM}
+  source ~/.bash_$PLATFORM
 fi
 
 # Host specific BASH aliases and functions...
