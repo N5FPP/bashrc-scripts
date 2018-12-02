@@ -18,7 +18,7 @@ if [ "$PS1" ]; then
   # aliases...
   #
   alias      pa="ps auxww"
-  alias     psg="pgrep -alfi"
+  alias     psg="pgrep -alf"
   alias psgetty="ps auxww | grep getty"
 
 
