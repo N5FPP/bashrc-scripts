@@ -1,0 +1,18 @@
+# .bash_CYGWIN_NT-6.1
+
+export PLATFORM_PATH=`mkpath \
+	/cygdrive/d/go/bin \
+	/usr/local/bin \
+	/cygdrive/c/Program\ Files/Java/jdk1.7.0_21/bin/ \
+`
+
+# Interactive stuff...
+#
+if [ "$PS1" ]; then
+
+  # aliases...
+  #
+  alias      pa="ps auxww"
+  alias     psg="ps auxww | grep -v grep | grep"
+
+fi
