@@ -1,8 +1,5 @@
-# $File$
+# $Id$
 #------------------------------------------------------------------------------
-
-# $CommitHashAbbreviated$
-# $CommitterDateISO8601$
 
 if [ "${PS1}" ]; then
   echo Loading local project configuration for `hostname`...
@@ -24,24 +21,26 @@ if [ "${PS1}" ]; then
 fi
 
 #------------------------------------------------------------------------------
+#
+PYBOMBS_PREFIX=~/Pybombs/gnuradio
+
+#------------------------------------------------------------------------------
 # Paths
 
 # My fundamental path - this stuff at the absolute front fo the path
 
-export MY_PATH=`mkpath							\
-	/usr/local/bin/							\
-	$HOME/bin/hosts							\
+export MY_PATH=`findpath						\
+#	${PYBOMBS_PREFIX}/bin						\
 	`
 
 export HOST_PATH=`mkpath						\
-	/Library/Tomcat/bin						\
+	/local/STMicroelectronics/STM32Cube/STM32CubeMX/		\
 	/Library/Groovy/bin						
 	`
 
 # Package Configs
 
 export PKG_CONFIG_PATH=`mkpath						\
-	/usr/local/Cellar/libpng12/1.2.54/lib/pkgconfig			\
 	/usr/local/share/pkgconfig					\
 	/usr/local/lib/pkgconfig					\
 	/usr/local/opt/qt5/lib/pkgconfig				\
@@ -54,8 +53,8 @@ export PKG_CONFIG_PATH=`mkpath						\
 
 # Golang
 
-export GOPATH=$HOME/Go
-export MY_PATH=`mkpath							\
+export GOPATH=${HOME}/Go
+export MY_PATH=`findpath						\
 	${MY_PATH}							\
 	${GOPATH}/bin							\
 	`
@@ -141,39 +140,55 @@ export CDPATH=`mkpath					\
 	${HOME}/					\
 	${HOME}/Ham_Radio/Projects/			\
 	${HOME}/Ham_Radio/Projects/n5fpp/		\
+	/local/Ham_Radio/Projects/			\
+	/local/Ham_Radio/Projects/n5fpp/		\
 	`
+
+alias grep="grep --color"
+
+alias ..="cd .."
+alias .2="cd ../.."
+alias .3="cd ../../.."
+alias .4="cd ../../../.."
+
+function ff() { find ${1:-.} -name ${2}; }
+
+#------------------------------------------------------------------------------
+# SDR aliases
+
+alias sdr_receiver_hpsdr='curl -o /dev/null http://rp-f01dcf.local/sdr_receiver_hpsdr/?type=run'
+alias sdr_tranceiver_hpsdr='curl -o /dev/null http://rp-f01dcf.local/sdr_transceiver_hpsdr/?type=run'
+alias sdr_tranceiver='curl -o /dev/null http://rp-f01dcf.local/sdr_transceiver/?type=run'
 
 #------------------------------------------------------------------------------
 # Internet development support
 
-alias sudoRm='sudo rm -rf ./*'
-
 # GIT aliases
 alias gdh="git diff HEAD~1..HEAD"
 
-# CVS aliases
-
-#alias  A="cvs     add"
-#alias Ab="cvs     add      -kb"
-alias An="cvs     annotate"
-alias Ci="cvs     commit"
-alias Co="cvs     checkout"
-alias  D="cvs     diff     -cw"
-alias  E="cvs     export"
-alias Nu="cvs -qn update   -d"
-alias  T="cvs     tag"
-alias  U="cvs -q  update   -d"
-alias  L="cvs     log"
-
-A() {
-  cvs add $@
-  cvs ci -m "Initial check-in" $@
-}
-
-Ab() {
-  cvs add -kb $@
-  cvs ci -m "Initial check-in" $@
-}
+### # CVS aliases
+### 
+### #alias  A="cvs     add"
+### #alias Ab="cvs     add      -kb"
+### alias An="cvs     annotate"
+### alias Ci="cvs     commit"
+### alias Co="cvs     checkout"
+### alias  D="cvs     diff     -cw"
+### alias  E="cvs     export"
+### alias Nu="cvs -qn update   -d"
+### alias  T="cvs     tag"
+### alias  U="cvs -q  update   -d"
+### alias  L="cvs     log"
+### 
+### A() {
+###   cvs add $@
+###   cvs ci -m "Initial check-in" $@
+### }
+### 
+### Ab() {
+###   cvs add -kb $@
+###   cvs ci -m "Initial check-in" $@
+### }
 
 # Perl aliases
 
@@ -210,10 +225,10 @@ pcd() {
 
 # Look at the current Tomcat log
 
-ll () {   
-  datestamp=`date +"%Y-%m-%d"`;   
-  less /Library/Tomcat/logs/localhost_log.${datestamp}.txt; 
-}
+#ll () {   
+#  datestamp=`date +"%Y-%m-%d"`;   
+#  less /Library/Tomcat/logs/localhost_log.${datestamp}.txt; 
+#}
 
 alias cmakeEclipse='cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../'
 
@@ -222,7 +237,4 @@ alias cmakeEclipse='cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=
 [ -f ${PROJECT_HOME}/rhinocorps/etc/projectrc.bash ] \
   && source ${PROJECT_HOME}/rhinocorps/etc/projectrc.bash
 
-source ~/gnuradio/setup_env.sh 
 
-#------------------------------------------------------------------------------
-# $CommitHashAbbreviated$
