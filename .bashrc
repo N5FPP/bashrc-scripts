@@ -288,10 +288,35 @@ if [ "$PS1" ]; then
     TTY="console"
   fi
 
-  case "${TERM}" in
-    xterm-color | *color) color_prompt=yes ;;
-    *) unset color_prompt ;;
-  esac
+  if [ "${DISPLAY}" ]; then
+    TERM=xterm
+  else
+    TERM=vt220
+  fi
+
+  if [ "$(tput colors)" -gt 0 ]; then
+    color_prompt=yes
+
+#    GIT_PS1_HIDE_IF_PWD_IGNORED=yes
+    GIT_PS1_DESCRIBE_STYLE=yes
+    GIT_PS1_SHOWDIRTYSTATE=yes
+    GIT_PS1_SHOWSTASHSTATE=yes
+    GIT_PS1_SHOWUNTRACKEDFILES=yes
+    GIT_PS1_SHOWUPSTREAM=yes
+#    GIT_PS1_STATESEPARATOR
+    GIT_PS1_SHOWCOLORHINTS=yes
+
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+
+  else
+    unset color_prompt
+  fi
 
   # Build prompt string for any non-login shell invocations...
   #
