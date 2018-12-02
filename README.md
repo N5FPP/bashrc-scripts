@@ -38,7 +38,7 @@ your own use and environment, you get what you deserve.
 Do not come back to me if these scripts destroy your
 computer, cause your dog to run away from home, your 
 spouse to find a smarter partner, acne to break out
-across your skin, cause your cows to stop giving milk,
+across your skin, or your cows to stop giving milk,
 etc. etc. etc.
 
 
