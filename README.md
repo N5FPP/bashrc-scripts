@@ -28,4 +28,18 @@ The PLATFORM tuple is defined as:
 
 	export PLATFORM=${OS}-${OS_REV}-${HOSTTYPE}
 
+
+# WARNING!!! WARNING!!! WARNING!!!!
+
+These scripts apply to my own personal environment. If 
+you are dumb enough to use them without vetting them for
+your own use and environment, you get what you deserve.
+
+Do not come back to me if these scripts destroy your
+computer, cause your dog to run away from home, your 
+spouse to find a smarter partner, acne to break out
+across your skin, cause your cows to stop giving milk,
+etc. etc. etc.
+
+
 # $CommitHashAbbreviated$ $CommitterDateISO8601$
