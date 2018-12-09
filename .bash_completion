@@ -1,0 +1,7 @@
+# .bash_completion - User defined bash completion setup
+
+for dir in ${MY_BASH_COMPLETION_DIRS} ~/.bash_completion.d ; do 
+    for bcfile in ${dir}/* ; do
+        source $bcfile
+    done
+done
