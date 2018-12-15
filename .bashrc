@@ -4,8 +4,8 @@
 #  as standalone.
 #
 
-# $CommitHashAbbreviated$
-# $CommitterDateISO8601$
+# d1626a3
+# 2018-12-15 13:11:41 -0700
 
 # echo output
 #set -x

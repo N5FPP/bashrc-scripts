@@ -3,8 +3,8 @@
 #	.bash_functions - useful function definitions...
 #
 
-# $CommitHashAbbreviated$
-# $CommitterDateISO8601$
+# d1626a3
+# 2018-12-15 13:11:41 -0700
 
 # cpd - create backup of file(s) with date/time appended and our initials
 #
