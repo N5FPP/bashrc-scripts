@@ -4,8 +4,8 @@
 #  as standalone.
 #
 
-# d1626a3
-# 2018-12-15 13:11:41 -0700
+# 68636e2
+# 2018-12-01 17:06:29 -0700
 
 # echo output
 #set -x
@@ -323,12 +323,15 @@ if [ "$PS1" ]; then
   case "${EUID}" in
     0)	PS1="${color_prompt:+\e[0;31m}\u@\h # ${color_prompt:+\e[0m}"
         ;;
-    *)  PS1="\u@\h ${MYPROJECT:+[${MYPROJECT}] }\$(__git_ps1 ' (%s) ')"
-        PS1="${PS1}${color_prompt:+\\[\e[1;35m\\]}<\#> "
+    *)  ULOCK=$'\U1f512'
+	UPROMPT=$'\U1F449'
+	PS1="\u@\h ${MYPROJECT:+[${MYPROJECT}] }\$(__git_ps1 ' (%s) ')"
+        PS1="${PS1}${color_prompt:+\\[\e[1;35m\\]}[\#] ${UPROMPT} "
         PS1="${color_prompt:+\\[\e[1;33m\\]}${PS1}"
-        PS1="${SSH_AGENT_PID:+${color_prompt:+\\[\e[1;32m\\]}* }${PS1}" 
+        PS1="${SSH_AGENT_PID:+${color_prompt:+\\[\e[1;32m\\]}${ULOCK} }${PS1}" 
         PS1="${color_prompt:+\\[\e[1;36m\\]}\w\n${PS1}" 
         PS1="${color_prompt:+\\[\e[0m\\]}${PS1}${color_prompt:+\\[\e[0m\\]}"
+	unset ULOCK UPROMPT
         ;;
   esac
 
