@@ -126,13 +126,13 @@ if [ -f ~/.bash_$HOST ]; then
 fi
 
 # Process project related stuff (if it exists)...
-# 
+#
 if [ -f ~/.projectrc ]; then
   source ~/.projectrc
 fi
 
 ##############################################################################
-# P A T H S . . . 
+# P A T H S . . .
 ##############################################################################
 
 # X11 path...
@@ -209,8 +209,11 @@ STD="${STD}:                                        \
 # My local path within my home directory...
 #
 MY_PATH="${MY_PATH}                                 \
-    $HOME/bin/$PLATFORM:                            \
+    $HOME/bin/${PLATFORM}                           \
     $HOME/bin                                       \
+    $HOME/.local/bin                                \
+    $HOME/.scripts                                  \
+    $HOME/.scripts/*                                \
     "
 
 # Build $PATH...
@@ -260,7 +263,7 @@ fi
 # Perl Support...
 #
 #if [ ! "$PERL5LIB" ]; then
-#  export PERL5LIB=`mkpath  
+#  export PERL5LIB=`mkpath
 #		${PERL5LIB}                         \
 #		$HOME/lib/perl5                     \
 #		/usr/local/lib/perl5                \
@@ -277,7 +280,7 @@ if [ "$PS1" ]; then
   #
   no_exit_on_failed_exec=
 
-  shopt -s extglob cdspell cdable_vars 
+  shopt -s extglob cdspell cdable_vars
 
   stty intr  erase  kill  echoe
 
@@ -323,13 +326,13 @@ if [ "$PS1" ]; then
   case "${EUID}" in
     0)	PS1="${color_prompt:+\e[0;31m}\u@\h # ${color_prompt:+\e[0m}"
         ;;
-    *)  ULOCK=$'\U1f512'
-	UPROMPT=$'\U1F449'
+    *)  ULOCK=$([[ "${LANG}" =~ 'UTF-8' ]] && echo $'\U1f512' || echo "*")
+	UPROMPT=$([[ "${LANG}" =~ 'UTF-8' ]] && echo $'\U1F449' || echo ">")
 	PS1="\u@\h ${MYPROJECT:+[${MYPROJECT}] }\$(__git_ps1 ' (%s) ')"
         PS1="${PS1}${color_prompt:+\\[\e[1;35m\\]}[\#] ${UPROMPT} "
         PS1="${color_prompt:+\\[\e[1;33m\\]}${PS1}"
-        PS1="${SSH_AGENT_PID:+${color_prompt:+\\[\e[1;32m\\]}${ULOCK} }${PS1}" 
-        PS1="${color_prompt:+\\[\e[1;36m\\]}\w\n${PS1}" 
+        PS1="${SSH_AGENT_PID:+${color_prompt:+\\[\e[1;32m\\]}${ULOCK} }${PS1}"
+        PS1="${color_prompt:+\\[\e[1;36m\\]}\w\n${PS1}"
         PS1="${color_prompt:+\\[\e[0m\\]}${PS1}${color_prompt:+\\[\e[0m\\]}"
 	unset ULOCK UPROMPT
         ;;
@@ -382,13 +385,13 @@ if [ "$PS1" ]; then
 		`
 
   # BASH aliases...
-  # 
+  #
   if [ -f ~/.bash_aliases ]; then
     source ~/.bash_aliases
   fi
 
   # BASH functions...
-  # 
+  #
   if [ -f ~/.bash_functions ]; then
     source ~/.bash_functions
   fi
@@ -399,13 +402,13 @@ if [ "$PS1" ]; then
 
   # X application resource path...
   #
-  export XAPPLRESDIR=`mkpath                                \
-                        $HOME/lib/app-defaults              \
-                        /tools/X11R5/lib/X11/app-defaults   \
-                        /tools/X11R6/lib/X11/app-defaults   \
-                        /usr/X11R6/lib/X11/app-defaults     \
-                        /usr/unsupported/hotmetal           \
-                        `
+  export XAPPLRESDIR=`mkpath                        \
+		$HOME/lib/app-defaults              \
+		/tools/X11R5/lib/X11/app-defaults   \
+		/tools/X11R6/lib/X11/app-defaults   \
+		/usr/X11R6/lib/X11/app-defaults     \
+		/usr/unsupported/hotmetal           \
+  `
 
   # Force rehash of path...
   #
