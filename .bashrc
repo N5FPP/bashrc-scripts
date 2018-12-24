@@ -360,8 +360,14 @@ if [ "$PS1" ]; then
     export EDITOR=vi
   fi
   export PAGER=less
-#  export LESS=-Ms
-  export LESS=MeFRX
+  export LESS=iMeFRX
+  export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
+  export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
+  export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
+  export LESS_TERMCAP_so=$'\E[01;44;33m' # begin reverse video
+  export LESS_TERMCAP_se=$'\E[0m'        # reset reverse video
+  export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
+  export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 
   # Determine where to locate man pages...
@@ -370,10 +376,6 @@ if [ "$PS1" ]; then
 		${MANPATH}                  \
                 /usr/local/man              \
                 /usr/local/lib/perl5/man    \
-                /tools/X11R5/man            \
-                /tools/X11R6/man            \
-                /tools/sysad/man            \
-                /usr/X11R6/man              \
                 /usr/share/man              \
                 /usr/man                    \
                 `
@@ -400,24 +402,14 @@ if [ "$PS1" ]; then
     source /etc/bash_completion
   fi
 
-  # X application resource path...
-  #
-  export XAPPLRESDIR=`mkpath                        \
-		$HOME/lib/app-defaults              \
-		/tools/X11R5/lib/X11/app-defaults   \
-		/tools/X11R6/lib/X11/app-defaults   \
-		/usr/X11R6/lib/X11/app-defaults     \
-		/usr/unsupported/hotmetal           \
-  `
-
   # Force rehash of path...
   #
   hash -r
 
 fi
 
+export ALTERAOCLSDKROOT="/local/altera/16.0/hld"
+export QSYS_ROOTDIR="/local/altera/16.0/quartus/sopc_builder/bin"
+
 # EOF:  .bashrc
 
-export ALTERAOCLSDKROOT="/local/altera/16.0/hld"
-
-export QSYS_ROOTDIR="/local/altera/16.0/quartus/sopc_builder/bin"
