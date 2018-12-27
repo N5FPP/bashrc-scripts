@@ -31,12 +31,13 @@ alias j=jobs
 alias l=less
 alias m=more
 
+alias khup="pkill -hup"
 alias md=mkdir
 alias pg="pgrep -lf"
 alias pk="pkill"
 alias rerc="source ~/.bashrc"
+alias rerdb="xrdb -merge ~/.Xresources"
 alias reshell='SHLVL=`expr $SHLVL - 1` ; exec $SHELL'
-alias retty="kill -HUP 1"
 alias rexhost="xhost \`cat ~/.xhosts\`"
 alias rd=rmdir
 alias subs="grep Subject:"
