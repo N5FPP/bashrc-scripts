@@ -309,6 +309,11 @@ if [ "$PS1" ]; then
 #    GIT_PS1_STATESEPARATOR
     GIT_PS1_SHOWCOLORHINTS=yes
 
+    case "$(ps -q $PPID -o comm=)" in
+	    'st'|'terminator') USE_EMOJI=1;;
+	    *) unset USE_EMOJI;;
+    esac
+
     alias ls='ls --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
