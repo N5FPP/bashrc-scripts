@@ -31,6 +31,8 @@ alias j=jobs
 alias l=less
 alias m=more
 
+alias please='sudo $(fc -nl -1)'
+
 alias khup="pkill -hup"
 alias md=mkdir
 alias pg="pgrep -lf"
@@ -47,4 +49,5 @@ alias tt="tar ztf"
 alias tcv="tar zcvf"
 alias txv="tar zxvf"
 #alias xrs='eval \`resize -u\`'
+alias xp="xprop WM_NAME WM_CLASS"
 alias zc=zcat
