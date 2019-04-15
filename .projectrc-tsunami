@@ -35,6 +35,8 @@ PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
 # My fundamental path - this stuff at the absolute front fo the path
 
 export MY_PATH=`mkpath							\
+	${MINGW_PREFIX:+${MINGW_PREFIX}/bin}    			\
+        ${JAVA_PATH:+${JAVA_HOME}/bin}          			\
 	${PYBOMBS_PREFIX}/bin						\
 	${HOME}/.cargo/bin						\
 	`

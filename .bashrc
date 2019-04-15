@@ -35,20 +35,32 @@ fi
 
 # These two functions get used by everything...
 
+function quote () { sed -e 's: :\\ :g' <<< $* ; }
+function debug () { shopt -qp extdebug && echo $* 2>&1 ; }
+
 ##############################################################################
 #
 # mkpath - Walk through possible paths and return what exists...
 #
+# Usage: mkpath {path} [{path:path}]
+#
+# {path} can be one or more directories, separated by unquoted whitespace
+#        or colons (":").
+#
 function mkpath () {
-  for arg; do
-    echo "${arg}:" | \
-      while read -d : dir; do
-        if [ -d "${dir}" ]; then
-          echo -n "${dir}:"
-        fi
-      done
-  done
+   IFS=":${IFS}" read -a directories <<< "$*"
+   let path ""
+
+   for directory in "${directories[@]}"
+   do
+	debug "[mkpath] directory = ${directory}" 
+
+   	[ -d "${directory}" ] && path="${path}:${directory}"
+   done
+
+   echo ${path}
 }
+
 
 ##############################################################################
 #
@@ -221,7 +233,7 @@ MY_PATH="${MY_PATH}                                 \
 export PATH=`mkpath                                 \
     $MY_PATH                                        \
     $PROJECT_PATH                                   \
-    $HOST_PATH                                      \
+    $(quote ${HOST_PATH})                           \
     $PLATFORM_PATH                                  \
     $X11?                                           \
     $LOCAL                                          \
@@ -281,6 +293,8 @@ if [ "$PS1" ]; then
   no_exit_on_failed_exec=
 
   shopt -s extglob cdspell cdable_vars
+
+  set -o vi
 
   stty intr  erase  kill  echoe
 
