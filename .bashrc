@@ -35,8 +35,8 @@ fi
 
 # These two functions get used by everything...
 
-function quote () { sed -e 's: :\\ :g' <<< $* ; }
-function debug () { shopt -qp extdebug && echo $* 2>&1 ; }
+function quote () { sed -e 's: :\\ :g' <<< "$@" ; }
+function debug () { shopt -qp extdebug && echo "$@" 2>&1 ; }
 
 ##############################################################################
 #
@@ -48,17 +48,17 @@ function debug () { shopt -qp extdebug && echo $* 2>&1 ; }
 #        or colons (":").
 #
 function mkpath () {
-   IFS=":${IFS}" read -a directories <<< "$*"
+   IFS+=":" read -a directories <<< "$@"
    let path ""
 
    for directory in "${directories[@]}"
    do
-	debug "[mkpath] directory = ${directory}" 
+	debug "[mkpath] directory = ${directory}"
 
    	[ -d "${directory}" ] && path="${path}:${directory}"
    done
 
-   echo ${path}
+   echo "${path}"
 }
 
 
@@ -68,19 +68,18 @@ function mkpath () {
 #          and/or files.
 #
 function mkfilepath () {
-  local paths"=`echo $* | sed 's/:/ /g'`"
+  IFS+=":" read -a paths <<< "$@"
   local rval=""
 
-  for i in $paths
+  for path in "${paths[@]}"
   do
-    if [ -d ${i} -o -f ${i} ]; then
-      # The following line will only add a colon if $rval is non null..
-      #
-      [ "$rval" ] && rval=${rval}:${i} || rval=${i}
+    debug "[mkfilepath] path = ${path}"
+    if [ -d "${path}" -o -f "${path}" ]; then
+      [ "${rval}" ] && rval="${rval}:${path}" || rval="${path}"
     fi
   done
 
-  echo $rval
+  echo "${rval}"
 }
 
 ##############################################################################
@@ -88,18 +87,18 @@ function mkfilepath () {
 # findpath - Walk through possible paths and return first valid path...
 #
 function findpath () {
-  local paths"=`echo $* | sed 's/:/ /g'`"
+  IFS+=":" read -a paths <<< "$@"
   local rval=""
 
-  for i in $paths
+  for path in "${paths[@]}"
   do
-    if [ -d $i ]; then
-      rval=$i
+    if [ -d "${path}" ]; then
+      rval="${path}"
       break
     fi
   done
 
-  echo $rval
+  echo "${rval}"
 }
 
 ##############################################################################
@@ -107,34 +106,34 @@ function findpath () {
 # findfile - Walk through possible file paths and return first valid path...
 #
 function findfile () {
-  local paths"=`echo $* | sed 's/:/ /g'`"
+  IFS+=":" read -a paths <<< "$@"
   local rval=""
 
-  for i in $paths
+  for path in "${paths[@]}"
   do
-    if [ -f $i ]; then
-      rval=$i
+    if [ -f "${path}" ]; then
+      rval="${path}"
       break
     fi
   done
 
-  echo $rval
+  echo "${rval}"
 }
 
 # Host type specific BASH aliases and functions...
 #
-if [ -f ~/.bash_$PLATFORM ]; then
-  source ~/.bash_$PLATFORM
+if [ -f ~/.bash_"${PLATFORM}" ]; then
+  source ~/.bash_"${PLATFORM}"
 else
-  [ "$PS1" ] && echo Creating ~/.bash_${PLATFORM}...
-  ln -s ~/.bash_${OS} ~/.bash_${PLATFORM}
-  source ~/.bash_$PLATFORM
+  [ "$PS1" ] && echo "Creating ~/.bash_${PLATFORM}..."
+  ln -s ~/".bash_${OS}" ~/".bash_${PLATFORM}"
+  source ~/".bash_${PLATFORM}"
 fi
 
 # Host specific BASH aliases and functions...
 #
-if [ -f ~/.bash_$HOST ]; then
-  source ~/.bash_$HOST
+if [ -f ~/".bash_${HOST}" ]; then
+  source ~/".bash_${HOST}"
 fi
 
 # Process project related stuff (if it exists)...
@@ -230,23 +229,23 @@ MY_PATH="${MY_PATH}                                 \
 
 # Build $PATH...
 #
-export PATH=`mkpath                                 \
-    $MY_PATH                                        \
-    $PROJECT_PATH                                   \
+export PATH=$(mkpath "                              \
+    ${MY_PATH}                                      \
+    ${PROJECT_PATH}                                 \
     $(quote ${HOST_PATH})                           \
-    $PLATFORM_PATH                                  \
-    $X11?                                           \
-    $LOCAL                                          \
-    $OPT                                            \
-    ${ORACLE_HOME:+$ORACLE_HOME/bin}                \
-    ${INFORMIXDIR:+$INFORMIXDIR/bin}                \
-    ${SYBASE:+$SYBASE/bin}                          \
-    ${PBHOME:+$PBHOME/bin}                          \
-    $SYSTEM                                         \
-    $APPS                                           \
-    $STD                                            \
+    ${PLATFORM_PATH}                                \
+    ${X11}                                          \
+    ${LOCAL}                                        \
+    ${OPT}                                          \
+    ${ORACLE_HOME:+${ORACLE_HOME}/bin}              \
+    ${INFORMIXDIR:+${INFORMIXDIR}/bin}              \
+    ${SYBASE:+${SYBASE}/bin}                        \
+    ${PBHOME:+${PBHOME}/bin}                        \
+    ${SYSTEM}                                       \
+    ${APPS}                                         \
+    ${STD}                                          \
     .                                               \
-`
+")
 
 unset MY_PATH X11 LOCAL OPT SYSTEM APPS STD
 
@@ -254,7 +253,7 @@ unset MY_PATH X11 LOCAL OPT SYSTEM APPS STD
 # Shared library path...
 #
 if [ "$LD_LIBRARY_PATH" ]; then
-  export LD_LIBRARY_PATH=`mkpath                    \
+  export LD_LIBRARY_PATH=$(mkpath "                 \
                 ${LD_LIBRARY_PATH}                  \
                 /tools/X11R5/lib                    \
                 /tools/X11R6/lib                    \
@@ -268,19 +267,8 @@ if [ "$LD_LIBRARY_PATH" ]; then
                 ${SYBASE:+$SYBASE/lib}              \
                 ${PBHOME:+$PBHOME/bin}              \
                 ${PBHOME:+$PBHOME/windu/lib.sol2}   \
-                `
+	")
 fi
-
-##############################################################################
-# Perl Support...
-#
-#if [ ! "$PERL5LIB" ]; then
-#  export PERL5LIB=`mkpath
-#		${PERL5LIB}                         \
-#		$HOME/lib/perl5                     \
-#		/usr/local/lib/perl5                \
-#		`
-#fi
 
 ##############################################################################
 # If we are running interactive...
@@ -290,7 +278,7 @@ if [ "$PS1" ]; then
 
   # Make it so that failed `exec' commands don't flush this shell.
   #
-  no_exit_on_failed_exec=
+  no_exit_on_failed_exec=1
 
   shopt -s extglob cdspell cdable_vars
 
@@ -300,8 +288,8 @@ if [ "$PS1" ]; then
 
   # Determine which port we're coming in on...
   #
-  TTY=`tty | sed 's^/dev/^^'`
-  if [ "$TTY" = "/dev/console" ]; then
+  TTY=$(tty | sed 's^/dev/^^')
+  if [ "${TTY}" = "/dev/console" ]; then
     TTY="console"
   fi
 
@@ -314,14 +302,14 @@ if [ "$PS1" ]; then
   if [ "$(tput colors)" -gt 0 ]; then
     color_prompt=yes
 
-#    GIT_PS1_HIDE_IF_PWD_IGNORED=yes
-    GIT_PS1_DESCRIBE_STYLE=yes
-    GIT_PS1_SHOWDIRTYSTATE=yes
-    GIT_PS1_SHOWSTASHSTATE=yes
-    GIT_PS1_SHOWUNTRACKEDFILES=yes
-    GIT_PS1_SHOWUPSTREAM=yes
-#    GIT_PS1_STATESEPARATOR
-    GIT_PS1_SHOWCOLORHINTS=yes
+#    export GIT_PS1_HIDE_IF_PWD_IGNORED=yes
+    export GIT_PS1_DESCRIBE_STYLE=yes
+    export GIT_PS1_SHOWDIRTYSTATE=yes
+    export GIT_PS1_SHOWSTASHSTATE=yes
+    export GIT_PS1_SHOWUNTRACKEDFILES=yes
+    export GIT_PS1_SHOWUPSTREAM=yes
+#    export GIT_PS1_STATESEPARATOR
+    export GIT_PS1_SHOWCOLORHINTS=yes
 
     case "$(ps -q $PPID -o comm=)" in
 	    'st'|'terminator') USE_EMOJI=1;;
@@ -345,8 +333,8 @@ if [ "$PS1" ]; then
   case "${EUID}" in
     0)	PS1="${color_prompt:+\e[0;31m}\u@\h # ${color_prompt:+\e[0m}"
         ;;
-    *)  ULOCK=$([ "${USE_EMOJI}" -a "${LANG/*./}" = 'UTF-8' ] && echo $'\U1f512' || echo "*")
-	UPROMPT=$([ "${USE_EMOJI}" -a "${LANG/*./}" = 'UTF-8' ] && echo $'\U1F449' || echo ">")
+    *)  ULOCK=$([ "${USE_EMOJI}" ] && [ "${LANG/*./}" = 'UTF-8' ] && echo $'\U1f512' || echo "*")
+	UPROMPT=$([ "${USE_EMOJI}" ] && [ "${LANG/*./}" = 'UTF-8' ] && echo $'\U1F449' || echo ">")
 	PS1="\u@\h ${MYPROJECT:+[${MYPROJECT}] }\$(__git_ps1 ' (%s) ')"
         PS1="${PS1}${color_prompt:+\\[\e[1;35m\\]}[\#] ${UPROMPT} "
         PS1="${color_prompt:+\\[\e[1;33m\\]}${PS1}"
@@ -359,22 +347,16 @@ if [ "$PS1" ]; then
 
   # Tailor some bash behavior...
   #
-  rm -f $HISTFILE
+  rm -f "${HISTFILE}"
   unset HISTFILE
   export HISTFILESIZE=${HISTFILESIZE:-256}
   export HISTCONTROL=ignoreboth
   unset MAILCHECK
 
-  # Local printer...
-  #
-  if [ ! "$PRINTER" -a -f ~/.default_printer ]; then
-    export PRINTER=`cat ~/.default_printer`
-  fi
-
   # Tailor our working environment...
   #
-  if [ "`type -path editclient`" \!= "" ]; then
-    export EDITOR=`type -path editclient`
+  if [ "$(type -path editclient)" \!= "" ]; then
+    export EDITOR=$(type -path editclient)
   else
     export EDITOR=vi
   fi
@@ -391,19 +373,19 @@ if [ "$PS1" ]; then
 
   # Determine where to locate man pages...
   #
-  export MANPATH=`mkpath                    \
+  export MANPATH=$(mkpath "                 \
 		${MANPATH}                  \
                 /usr/local/man              \
                 /usr/local/lib/perl5/man    \
                 /usr/share/man              \
                 /usr/man                    \
-                `
+	")
 
-  export INFOPATH=`mkpath                   \
+  export INFOPATH=$(mkpath "                \
 		/sw/share/info              \
 		/sw/info                    \
 		/usr/share/info             \
-		`
+	")
 
   # BASH aliases...
   #

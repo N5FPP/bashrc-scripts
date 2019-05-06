@@ -5,14 +5,14 @@
 # 2018-12-01 16:21:48 -0700
 
 if [ "${PS1}" ]; then
-  echo Loading local project configuration for `hostname`...
+  echo "Loading local project configuration for $(hostname)..."
 fi
 
 #------------------------------------------------------------------------------
 # Project support
 
-if [ -z "${MYPROJECT}" -a -f ~/.myproject-${HOST} ]; then
-  export MYPROJECT=`cat ~/.myproject-${HOST}`
+if [ -z "${MYPROJECT}" ] && [ -f ~/".myproject-${HOST}" ]; then
+  export MYPROJECT=$(cat ~/".myproject-${HOST}")
 fi
 
 if [ "${MYPROJECT}" ]; then
@@ -27,28 +27,27 @@ fi
 # Pybombs setup
 
 PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
-[ -f ${PYBOMBS_PREFIX}/setup_env.sh ] && source ${PYBOMBS_PREFIX}/setup_env.sh
+[ -f "${PYBOMBS_PREFIX}/setup_env.sh" ] && source "${PYBOMBS_PREFIX}/setup_env.sh"
 
 #------------------------------------------------------------------------------
 # Paths
 
 # My fundamental path - this stuff at the absolute front fo the path
 
-export MY_PATH=`mkpath							\
-	${MINGW_PREFIX:+${MINGW_PREFIX}/bin}    			\
-        ${JAVA_PATH:+${JAVA_HOME}/bin}          			\
+export MY_PATH=$(mkpath "						\
 	${PYBOMBS_PREFIX}/bin						\
 	${HOME}/.cargo/bin						\
-	`
+	/opt/install/sdrangel/bin/					\
+")
 
-export HOST_PATH=`mkpath						\
+export HOST_PATH=$(mkpath "						\
 	/local/STMicroelectronics/STM32Cube/STM32CubeMX/		\
-	/Library/Groovy/bin						
-	`
+	/Library/Groovy/bin						\
+")
 
 # Package Configs
 
-export PKG_CONFIG_PATH=`mkpath						\
+export PKG_CONFIG_PATH=$(mkpath "					\
 	/usr/local/Cellar/libpng12/1.2.54/lib/pkgconfig			\
 	/usr/local/share/pkgconfig					\
 	/usr/local/lib/pkgconfig					\
@@ -58,68 +57,63 @@ export PKG_CONFIG_PATH=`mkpath						\
 	/opt/X11/lib/pkgconfig						\
 	/opt/X11/share/pkgconfig					\
 	/usr/lib/pkgconfig						\
-	`
+")
 
 # Golang
 
 export GOPATH=${HOME}/Go
-export MY_PATH=`mkpath							\
+export MY_PATH=$(mkpath "						\
 	${MY_PATH}							\
 	${GOPATH}/bin							\
-	`
+")
 
 # Java paths
 
-export JAVA_HOME=`findpath						\
-	$([ -f ~/.jdk-${MYPROJECT} ] && cat ~/.jdk-${MYPROJECT})	\
-	$([ -f ~/.jdk-${HOST} ]      && cat ~/.jdk-${HOST})		\
+export JAVA_HOME=$(findpath "						\
+	$(update-java-alternatives -l | cut -c43-)			\
 	/Library/Java/Home						\
-`
+")
 
 if [ "${PS1}" ]; then
   echo "Java home:  ${JAVA_HOME:-NONE}"
 fi
 
-# Perl library path
-
-export PERL5LIB=`mkfilepath						\
-	${MYPERL:+${MYPERL}/lib}					\
-	${MYPERL:+${MYPERL}/lib/site_perl}				\
-	/www/perl/lib{,/site_perl}					\
-`
-
 # Development tools paths
 
-export PROJECT_PATH=`mkfilepath						\
+export PROJECT_PATH=$(mkfilepath "					\
     	${PROJECT_HOME}/rhinocorps/bin          			\
 	${JAVA_HOME}/bin						\
 	/opt/*/bin							\
 	/opt/*								\
-`
+")
 
-#export PROJECT_CLASSPATH=`mkfilepath					\
-#`
+#export PROJECT_CLASSPATH=$(mkfilepath "				\
+#")
 
-#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:`mkfilepath			\
-#`
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(mkfilepath "		\
+	/opt/install/libsdrplay/lib					\
+")
 
 # Build a CDPATH variable.
 #
 # The 'find' comand returns all directories under current project
 #
-export CDPATH=`mkpath							\
+export CDPATH=$(mkpath "						\
 	.                                               		\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
-	$([ -d "${PROJECT_HOME}" ] && 
-		find ${PROJECT_HOME} -maxdepth 2 -type d | egrep -v '/(CVS|[rR]elease|scratch|tmp)') \
-	$([ -d ${HOME}/Projects ] && 
-		find ${HOME}/Projects -maxdepth 1 -type d | egrep -v '/(CVS|[rR]elease|scratch|tmp)') \
+	$([ -d "${PROJECT_HOME}" ] &&
+		find "${PROJECT_HOME}" -maxdepth 2 -type d | 		\
+			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
+	$([ -d "${HOME}/Projects" ] &&
+		find "${HOME}/Projects" -maxdepth 1 -type d | 		\
+			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
 	${HOME}/							\
 	${HOME}/Workspaces/						\
 	${HOME}/Workspaces/*/						\
-	`
+")
+
 
 alias grep="grep --color"
 
@@ -141,7 +135,7 @@ useproject() {
 
   export MYPROJECT=$1
 
-  exec $SHELL
+  exec "${SHELL}"
 }
 
 setproject() {
@@ -149,18 +143,16 @@ setproject() {
     echo 'Usage: setproject {project id}'				1>&2
   fi
 
-  echo $1 > ~/.myproject-${HOST}
+  echo "${1}" > ~/".myproject-${HOST}"
 
   unset MYPROJECT
 
-  exec $SHELL
+  exec "${SHELL}"
 }
 
 pcd() {
-  pushd ${PROJECT_HOME}/${1:+/$1}
+  pushd "${PROJECT_HOME}/${1:+/$1}"
 }
-
-# Look at the current Tomcat log
 
 alias cmakeEclipse='cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../'
 
