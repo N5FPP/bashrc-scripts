@@ -9,23 +9,23 @@
 
 export JAVA_HOME='/c/Program Files/Java/jdk1.8.0_191'
 
-export HOST_PATH=`mkpath				\
-	${HoST_PATH}					\
+export HOST_PATH=$(mkpath				\
+	${HOST_PATH}					\
 	"/c/Program\ Files/Java/jdk1.8.0_191/bin"	\
 	${MINGW_PREFIX:+${MINGW_PREFIX}/bin}		\
-`
+)
 debug "HOST_PATH=\"$HOST_PATH\""
 
-export POST_PATH=`mkpath				\
+export POST_PATH=$(mkpath				\
 	/cygdrive/c/Ruby193/bin/			\
 	/cygdrive/c/DevKit-tdm-32/bin/			\
 	!/cygdrive/c/DevKit-tdm-32/mingw/bin/		\
 	/cygdrive/c/QT/4.8.4/bin 			\
-`
+	)
 export LESS=-IN
 
 function proj () {
-	export CDPATH=`mkpath						\
+	export CDPATH=$(mkpath						\
 		.							\
 		..							\
 		../..							\
@@ -33,9 +33,11 @@ function proj () {
 		"/e/pascal/Simajin\ Workspace/SimajinProjects/${1}/"	\
 		"/e/pascal/Simajin\ Workspace/SimajinProjects/"		\
 		"/e/pascal/Simajin\ Workspace/"				\
-	`
+	)
 	cd ${1}
 }
+
+alias grep=rg
 
 #alias gem=gem.bat
 #alias rake=rake.bat

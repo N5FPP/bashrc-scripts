@@ -34,19 +34,19 @@ PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
 
 # My fundamental path - this stuff at the absolute front fo the path
 
-export MY_PATH=`mkpath							\
+export MY_PATH=$(mkpath							\
 	${PYBOMBS_PREFIX}/bin						\
 	${HOME}/.cargo/bin						\
-	`
+	)
 
-export HOST_PATH=`mkpath						\
+export HOST_PATH=$(mkpath						\
 	/local/STMicroelectronics/STM32Cube/STM32CubeMX/		\
-	/Library/Groovy/bin						
-	`
+	/Library/Groovy/bin
+	)
 
 # Package Configs
 
-export PKG_CONFIG_PATH=`mkpath						\
+export PKG_CONFIG_PATH=$(mkpath						\
 	/usr/local/Cellar/libpng12/1.2.54/lib/pkgconfig			\
 	/usr/local/share/pkgconfig					\
 	/usr/local/lib/pkgconfig					\
@@ -56,23 +56,23 @@ export PKG_CONFIG_PATH=`mkpath						\
 	/opt/X11/lib/pkgconfig						\
 	/opt/X11/share/pkgconfig					\
 	/usr/lib/pkgconfig						\
-	`
+	)
 
 # Golang
 
 export GOPATH=${HOME}/Go
-export MY_PATH=`mkpath							\
+export MY_PATH=$(mkpath							\
 	${MY_PATH}							\
 	${GOPATH}/bin							\
-	`
+	)
 
 # Java paths
 
-export JAVA_HOME=`findpath						\
+export JAVA_HOME=$(findpath						\
 	$([ -f ~/.jdk-${MYPROJECT} ] && cat ~/.jdk-${MYPROJECT})	\
 	$([ -f ~/.jdk-${HOST} ]      && cat ~/.jdk-${HOST})		\
 	/Library/Java/Home						\
-`
+)
 
 if [ "${PS1}" ]; then
   echo "Java home:  ${JAVA_HOME:-NONE}"
@@ -80,44 +80,44 @@ fi
 
 # Perl library path
 
-export PERL5LIB=`mkfilepath						\
+export PERL5LIB=$(mkfilepath						\
 	${MYPERL:+${MYPERL}/lib}					\
 	${MYPERL:+${MYPERL}/lib/site_perl}				\
 	/www/perl/lib{,/site_perl}					\
-`
+)
 
 # Development tools paths
 
-export PROJECT_PATH=`mkfilepath						\
+export PROJECT_PATH=$(mkfilepath						\
     	${PROJECT_HOME}/rhinocorps/bin          			\
 	${JAVA_HOME}/bin						\
 	/opt/*/bin							\
 	/opt/*								\
-`
+)
 
-#export PROJECT_CLASSPATH=`mkfilepath					\
-#`
+#export PROJECT_CLASSPATH=$(mkfilepath					\
+#)
 
-#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:`mkfilepath			\
-#`
+#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(mkfilepath			\
+#)
 
 # Build a CDPATH variable.
 #
 # The 'find' comand returns all directories under current project
 #
-export CDPATH=`mkpath							\
+export CDPATH=$(mkpath							\
 	.                                               		\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
-	$([ -d "${PROJECT_HOME}" ] && 
+	$([ -d "${PROJECT_HOME}" ] &&
 		find ${PROJECT_HOME} -maxdepth 2 -type d | egrep -v '/(CVS|[rR]elease|scratch|tmp)') \
-	$([ -d ${HOME}/Projects ] && 
+	$([ -d ${HOME}/Projects ] &&
 		find ${HOME}/Projects -maxdepth 1 -type d | egrep -v '/(CVS|[rR]elease|scratch|tmp)') \
 	${HOME}/							\
 	${HOME}/Workspaces/						\
 	${HOME}/Workspaces/*/						\
-	`
+	)
 
 alias grep="grep --color"
 

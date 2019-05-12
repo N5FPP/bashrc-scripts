@@ -49,7 +49,7 @@ function debug () { shopt -qp extdebug && echo "$@" 2>&1 ; }
 #
 function mkpath () {
    IFS+=":" read -a directories <<< "$@"
-   let path ""
+   local path=""
 
    for directory in "${directories[@]}"
    do
@@ -229,7 +229,7 @@ MY_PATH="${MY_PATH}                                 \
 
 # Build $PATH...
 #
-export PATH=$(mkpath "                              \
+export PATH=$(mkpath                                \
     ${MY_PATH}                                      \
     ${PROJECT_PATH}                                 \
     $(quote ${HOST_PATH})                           \
@@ -245,7 +245,7 @@ export PATH=$(mkpath "                              \
     ${APPS}                                         \
     ${STD}                                          \
     .                                               \
-")
+)
 
 unset MY_PATH X11 LOCAL OPT SYSTEM APPS STD
 
@@ -253,7 +253,7 @@ unset MY_PATH X11 LOCAL OPT SYSTEM APPS STD
 # Shared library path...
 #
 if [ "$LD_LIBRARY_PATH" ]; then
-  export LD_LIBRARY_PATH=$(mkpath "                 \
+  export LD_LIBRARY_PATH=$(mkpath                    \
                 ${LD_LIBRARY_PATH}                  \
                 /tools/X11R5/lib                    \
                 /tools/X11R6/lib                    \
@@ -267,7 +267,7 @@ if [ "$LD_LIBRARY_PATH" ]; then
                 ${SYBASE:+$SYBASE/lib}              \
                 ${PBHOME:+$PBHOME/bin}              \
                 ${PBHOME:+$PBHOME/windu/lib.sol2}   \
-	")
+	)
 fi
 
 ##############################################################################
@@ -373,19 +373,19 @@ if [ "$PS1" ]; then
 
   # Determine where to locate man pages...
   #
-  export MANPATH=$(mkpath "                 \
+  export MANPATH=$(mkpath                   \
 		${MANPATH}                  \
                 /usr/local/man              \
                 /usr/local/lib/perl5/man    \
                 /usr/share/man              \
                 /usr/man                    \
-	")
+	)
 
-  export INFOPATH=$(mkpath "                \
+  export INFOPATH=$(mkpath                  \
 		/sw/share/info              \
 		/sw/info                    \
 		/usr/share/info             \
-	")
+	)
 
   # BASH aliases...
   #

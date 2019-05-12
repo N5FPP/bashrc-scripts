@@ -13,14 +13,14 @@ export ANDROID_HOME=/opt/android-sdk-linux_x86
 
 WORKSPACES=`mkpath $HOME/Workspaces`
 
-CDPATH=.:`mkpath \
+CDPATH=.:$(mkpath \
 	${PROJECTS_DIR}/* \
 	${PROJECTS_DIR}/n5fpp/* \
 	${WORKSPACES} \
 	${CDPATH} \
-`
+)
 
-export MY_PATH=`mkpath \
+export MY_PATH=$(mkpath \
 	${PROJECTS_DIR}/bin \
         /local/{*,*/*,*/*/*,*/*/*/*}/bin \
 	/opt/*/bin \
@@ -28,7 +28,7 @@ export MY_PATH=`mkpath \
 	/opt/android-sdk-linux_x86/tools/ \
 	/opt/CodeSourcery/Sourcery_G++_Lite/bin/ \
 	${MY_PATH} \
-`
+)
 
 
 if [ "$PS1" ]; then
@@ -77,12 +77,12 @@ if [ "$PS1" ]; then
 		echo "COMP_WORDS : ( ${COMP_WORDS[@]} )" 	>> ~/tmp/run.log
 
 		case "$COMP_CWORD" in
-		  1 ) COMPREPLY=( $( shopt -s nullglob 
+		  1 ) COMPREPLY=( $( shopt -s nullglob
                                      cd ${PROJECTS_DIR} \
                                         && compgen -W "$( echo */Android/ )" -- ${cur} \
                                              | sed -e 's:/Android/::g' ) )
 		  	  ;;
-                  2 ) COMPREPLY=( $( shopt -s nullglob 
+                  2 ) COMPREPLY=( $( shopt -s nullglob
                                      cd ${PROJECTS_DIR}/${COMP_WORDS[1]}/Android/ \
                                         && compgen -W "$( echo */.repo/ */*/.repo/ )" -- ${cur} \
                                              | sed -e 's:/.repo/::g' ) )
@@ -175,7 +175,7 @@ if [ "$PS1" ]; then
 
 #		COMPREPLY=( $( cd ${PROJECTS_DIR} && compgen -d $cur ) )
 
-		COMPREPLY=( $( shopt -s nullglob 
+		COMPREPLY=( $( shopt -s nullglob
                 cd ${PROJECTS_DIR} \
                     && compgen -W "$( echo */Angstrom/setup-scripts/ )" -- ${cur} \
                     | sed -e 's:/Angstrom/setup-scripts/::g' ) )
@@ -223,8 +223,8 @@ if [ "$PS1" ]; then
 
 
 	# Copy contents between two similarly structured trees
-	# 
-	xcp () 	{ 
+	#
+	xcp () 	{
 	  local src=$1; shift;
 	  local dst=$1; shift;
       local p=`pwd`;
