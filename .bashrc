@@ -220,11 +220,12 @@ STD="${STD}:                                        \
 # My local path within my home directory...
 #
 MY_PATH="${MY_PATH}                                 \
-    $HOME/bin/${PLATFORM}                           \
-    $HOME/bin                                       \
-    $HOME/.local/bin                                \
-    $HOME/.scripts                                  \
-    $HOME/.scripts/*                                \
+    ${HOME}/bin/${PLATFORM}                           \
+    ${HOME}/bin                                       \
+    ${HOME}/.cargo/bin                                \
+    ${HOME}/.local/bin                                \
+    ${HOME}/.scripts                                  \
+    ${HOME}/.scripts/*                                \
     "
 
 # Build $PATH...

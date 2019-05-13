@@ -24,20 +24,22 @@ export POST_PATH=$(mkpath				\
 	)
 export LESS=-IN
 
+export SIMAJIN_WORKSPACE="/e/pascal/Simajin\ Workspace"
+
 function proj () {
 	export CDPATH=$(mkpath						\
 		.							\
 		..							\
 		../..							\
 		../../..						\
-		"/e/pascal/Simajin\ Workspace/SimajinProjects/${1}/"	\
-		"/e/pascal/Simajin\ Workspace/SimajinProjects/"		\
-		"/e/pascal/Simajin\ Workspace/"				\
-	)
+		${SIMAJIN_WORKSPACE}/SimajinProjects/${1}/		\
+		${SIMAJIN_WORKSPACE}/SimajinProjects/			\
+		${SIMAJIN_WORKSPACE}/Simajin\ Workspace/		\
+		)
 	cd ${1}
 }
 
-alias grep=rg
+[ -f "${HOME}"/.cargo/bin/rg ] && alias	grep=rg
 
 #alias gem=gem.bat
 #alias rake=rake.bat
