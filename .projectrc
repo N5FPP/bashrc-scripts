@@ -11,25 +11,26 @@ PROJECTS_DIR=/local/Projects
 
 export ANDROID_HOME=/opt/android-sdk-linux_x86
 
-WORKSPACES=`mkpath $HOME/Workspaces`
+WORKSPACES=$(mkpath ${HOME}/Workspaces)
 
-CDPATH=.:$(mkpath \
-	${PROJECTS_DIR}/* \
-	${PROJECTS_DIR}/n5fpp/* \
-	${WORKSPACES} \
-	${CDPATH} \
+CDPATH=.:$(mkpath 						\
+	${PROJECTS_DIR}/* 					\
+	${PROJECTS_DIR}/n5fpp/* 				\
+	${WORKSPACES} 						\
+	${CDPATH} 						\
 )
 
-export MY_PATH=$(mkpath \
-	${PROJECTS_DIR}/bin \
-        /local/{*,*/*,*/*/*,*/*/*/*}/bin \
-	/opt/*/bin \
-	/opt/android-sdk-linux_x86/platform-tools/ \
-	/opt/android-sdk-linux_x86/tools/ \
-	/opt/CodeSourcery/Sourcery_G++_Lite/bin/ \
-	${MY_PATH} \
+export MY_PATH=$(mkpath 					\
+	${PROJECTS_DIR}/bin 					\
+        /local/{*,*/*,*/*/*,*/*/*/*}/bin 			\
+	/opt/*/bin 						\
+	/opt/android-sdk-linux_x86/platform-tools/ 		\
+	/opt/android-sdk-linux_x86/tools/ 			\
+	/opt/CodeSourcery/Sourcery_G++_Lite/bin/ 		\
+	$(quote ${MY_PATH})					\
 )
 
+debug MY_PATH = ${MY_PATH}
 
 if [ "$PS1" ]; then
 

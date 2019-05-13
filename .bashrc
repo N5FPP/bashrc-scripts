@@ -36,7 +36,7 @@ fi
 # These two functions get used by everything...
 
 function quote () { sed -e 's: :\\ :g' <<< "$@" ; }
-function debug () { shopt -qp extdebug && echo "$@" 2>&1 ; }
+function debug () { shopt -qp extdebug && echo "$@" 1>&2 ; }
 
 ##############################################################################
 #
@@ -122,18 +122,14 @@ function findfile () {
 
 # Host type specific BASH aliases and functions...
 #
-if [ -f ~/.bash_"${PLATFORM}" ]; then
-  source ~/.bash_"${PLATFORM}"
-else
-  [ "$PS1" ] && echo "Creating ~/.bash_${PLATFORM}..."
-  ln -s ~/".bash_${OS}" ~/".bash_${PLATFORM}"
-  source ~/".bash_${PLATFORM}"
+if [ -f ~/.bash_${PLATFORM} ]; then
+  source ~/.bash_${PLATFORM}
 fi
 
 # Host specific BASH aliases and functions...
 #
-if [ -f ~/".bash_${HOST}" ]; then
-  source ~/".bash_${HOST}"
+if [ -f ~/.bash_${HOST} ]; then
+  source ~/.bash_${HOST}
 fi
 
 # Process project related stuff (if it exists)...
@@ -219,22 +215,25 @@ STD="${STD}:                                        \
 
 # My local path within my home directory...
 #
-MY_PATH="${MY_PATH}                                 \
-    ${HOME}/bin/${PLATFORM}                           \
-    ${HOME}/bin                                       \
-    ${HOME}/.cargo/bin                                \
-    ${HOME}/.local/bin                                \
-    ${HOME}/.scripts                                  \
-    ${HOME}/.scripts/*                                \
+MY_PATH="${MY_PATH}                                  \
+    ${HOME}/bin/${PLATFORM}                          \
+    ${HOME}/bin                                      \
+    ${HOME}/.cargo/bin                               \
+    ${HOME}/.local/bin                               \
+    ${HOME}/.scripts                                 \
+    ${HOME}/.scripts/*                               \
     "
+
+debug MY_PATH = $(quote ${MY_PATH})
+debug PLATFORM_PATH = $(quote ${PLATFORM_PATH})
 
 # Build $PATH...
 #
 export PATH=$(mkpath                                \
-    ${MY_PATH}                                      \
-    ${PROJECT_PATH}                                 \
+    $(quote ${MY_PATH})                             \
+    $(quote ${PROJECT_PATH})                        \
     $(quote ${HOST_PATH})                           \
-    ${PLATFORM_PATH}                                \
+    $(quote ${PLATFORM_PATH})                       \
     ${X11}                                          \
     ${LOCAL}                                        \
     ${OPT}                                          \

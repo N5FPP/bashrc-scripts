@@ -35,15 +35,20 @@ PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
 # My fundamental path - this stuff at the absolute front fo the path
 
 export MY_PATH=$(mkpath  						\
-	${MY_PATH}							\
+	$(quote ${MY_PATH})						\
 	${PYBOMBS_PREFIX}/bin						\
 	${HOME}/.cargo/bin						\
 	${HOME}/.local/bin						\
 	${HOME}/.scripts/*						\
 	/opt/install/sdrangel/bin/					\
+	"/e/Program\ Files/nodejs"  					\
+	/e/tools/apache-ant-1.10.5/bin  				\
+	"/c/Program\ Files/Docker Toolbox"  				\
+	/c/Users/pascal/AppData/Local/Microsoft/WindowsApps  		\
+	/c/Users/pascal/AppData/Roaming/npm  				\
 )
 
-debug MY_PATH = ${MY_PATH}
+debug MY_PATH = $(quote ${MY_PATH})
 
 export HOST_PATH=$(mkpath  						\
 	/local/STMicroelectronics/STM32Cube/STM32CubeMX/		\
@@ -68,9 +73,11 @@ export PKG_CONFIG_PATH=$(mkpath  					\
 
 export GOPATH=${HOME}/Go
 export MY_PATH=$(mkpath  						\
-	${MY_PATH}							\
+	$(quote ${MY_PATH})						\
 	${GOPATH}/bin							\
 )
+
+debug MY_PATH = $(quote ${MY_PATH})
 
 # Java paths
 
