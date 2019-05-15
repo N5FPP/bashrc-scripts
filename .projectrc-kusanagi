@@ -29,12 +29,11 @@ PYBOMBS_PREFIX=~/Pybombs/gnuradio
 
 # My fundamental path - this stuff at the absolute front fo the path
 
-export MY_PATH=`findpath						\
+export MY_PATH=$(mkpath							\
 #	${PYBOMBS_PREFIX}/bin						\
-	`
+	)
 
 export HOST_PATH=$(mkpath						\
-	/local/STMicroelectronics/STM32Cube/STM32CubeMX/		\
 	/Library/Groovy/bin
 	)
 
@@ -54,10 +53,10 @@ export PKG_CONFIG_PATH=$(mkpath						\
 # Golang
 
 export GOPATH=${HOME}/Go
-export MY_PATH=`findpath						\
-	${MY_PATH}							\
+export MY_PATH=$(mypath							\
+	$(quote ${MY_PATH})						\
 	${GOPATH}/bin							\
-	`
+	)
 
 ### # Tomcat/Catalina home
 ###

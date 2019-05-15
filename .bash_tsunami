@@ -10,11 +10,17 @@
 export JAVA_HOME='/c/Program Files/Java/jdk1.8.0_191'
 
 export HOST_PATH=$(mkpath				\
-	${HOST_PATH}					\
+	$(quote ${HOST_PATH})				\
 	"/c/Program\ Files/Java/jdk1.8.0_191/bin"	\
 	${MINGW_PREFIX:+${MINGW_PREFIX}/bin}		\
+	/local/bin					\
+	/local/eagle					\
+	/local/games/*					\
+	/local/MATLAB/R2016b/bin			\
+	/local/STMicroelectronics/STM32Cube		\
 )
-debug "HOST_PATH=\"$HOST_PATH\""
+
+debug HOST_PATH = $(quote ${HOST_PATH})
 
 export POST_PATH=$(mkpath				\
 	/cygdrive/c/Ruby193/bin/			\

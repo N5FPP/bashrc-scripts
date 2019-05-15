@@ -4,8 +4,8 @@
 #  project environments, but can be ran as standalone.
 #
 
-# $CommitHashAbbreviated$
-# $CommitterDateISO8601$
+# 112f821
+# 2019-05-11 22:30:28 -0600
 
 PROJECTS_DIR=/local/Projects
 
@@ -21,13 +21,9 @@ CDPATH=.:$(mkpath 						\
 )
 
 export MY_PATH=$(mkpath 					\
-	${PROJECTS_DIR}/bin 					\
-        /local/{*,*/*,*/*/*,*/*/*/*}/bin 			\
-	/opt/*/bin 						\
-	/opt/android-sdk-linux_x86/platform-tools/ 		\
-	/opt/android-sdk-linux_x86/tools/ 			\
-	/opt/CodeSourcery/Sourcery_G++_Lite/bin/ 		\
 	$(quote ${MY_PATH})					\
+	${PROJECTS_DIR}/bin 					\
+	/opt/*/bin 						\
 )
 
 debug MY_PATH = ${MY_PATH}

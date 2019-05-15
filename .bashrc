@@ -120,10 +120,10 @@ function findfile () {
   echo "${rval}"
 }
 
-# Host type specific BASH aliases and functions...
+# Process project related stuff (if it exists)...
 #
-if [ -f ~/.bash_${PLATFORM} ]; then
-  source ~/.bash_${PLATFORM}
+if [ -f ~/.projectrc ]; then
+  source ~/.projectrc
 fi
 
 # Host specific BASH aliases and functions...
@@ -132,10 +132,10 @@ if [ -f ~/.bash_${HOST} ]; then
   source ~/.bash_${HOST}
 fi
 
-# Process project related stuff (if it exists)...
+# Host type specific BASH aliases and functions...
 #
-if [ -f ~/.projectrc ]; then
-  source ~/.projectrc
+if [ -f ~/.bash_${PLATFORM} ]; then
+  source ~/.bash_${PLATFORM}
 fi
 
 ##############################################################################
@@ -246,6 +246,8 @@ export PATH=$(mkpath                                \
     ${STD}                                          \
     .                                               \
 )
+
+debug PATH = ${PATH}
 
 unset MY_PATH X11 LOCAL OPT SYSTEM APPS STD
 

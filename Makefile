@@ -12,6 +12,7 @@ COMMON_FILES =	$(DESTDIR)/.bash_aliases \
 		$(DESTDIR)/.bash_Linux \
 		$(DESTDIR)/.bashrc \
 		$(DESTDIR)/.bash_ssh-agent \
+		$(DESTDIR)/.inputrc \
 		$(DESTDIR)/.projectrc
 
 Linux_FILES =	$(DESTDIR)/.bash_Linux \
