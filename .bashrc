@@ -403,6 +403,10 @@ if [ "$PS1" ]; then
 
   if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
+  else
+    if [ -f ~/.bash_completion ] ; then
+      source ~/.bash_completion
+    fi
   fi
 
   # Force rehash of path...

@@ -37,6 +37,7 @@ PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
 export MY_PATH=$(mkpath  						\
 	$(quote ${MY_PATH})						\
 	${PYBOMBS_PREFIX}/bin						\
+	${HOME}/mingw64/bin						\
 	${HOME}/.cargo/bin						\
 	${HOME}/.local/bin						\
 	${HOME}/.scripts/*						\
