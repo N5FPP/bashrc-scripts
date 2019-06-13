@@ -51,6 +51,7 @@ export MY_PATH=$(mkpath  						\
 debug MY_PATH = $(quote ${MY_PATH})
 
 export HOST_PATH=$(mkpath  						\
+	$(quote ${HOST_PATH})						\
 	/local/STMicroelectronics/STM32Cube/STM32CubeMX/		\
 	/Library/Groovy/bin						\
 )
@@ -115,6 +116,8 @@ export CDPATH=$(mkpath  						\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
+	/e/pascal/SimajinWorkspace/SimajinProjects			\
+	/e/pascal/SimajinWorkspace					\
 	$([ -d "${PROJECT_HOME}" ] &&
 		find "${PROJECT_HOME}" -maxdepth 2 -type d | 		\
 			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
@@ -123,7 +126,6 @@ export CDPATH=$(mkpath  						\
 			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
 	${HOME}/							\
 	${HOME}/Workspaces/						\
-	${HOME}/Workspaces/*/						\
 )
 
 
