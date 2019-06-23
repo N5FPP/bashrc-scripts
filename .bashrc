@@ -158,8 +158,9 @@ X11="${X11}:                                        \
 # Local path...
 #
 LOCAL="${LOCAL}:                                    \
-    /usr/local/bin                                  \
-    /usr/local/*/bin                                \
+    /snap/bin:                                      \
+    /usr/local/bin:                                 \
+    /usr/local/*/bin:                               \
     "
 
 # System path...
