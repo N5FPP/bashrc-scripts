@@ -41,5 +41,3 @@ spouse to find a smarter partner, acne to break out
 across your skin, or your cows to stop giving milk,
 etc. etc. etc.
 
-
-# $CommitHashAbbreviated$ $CommitterDateISO8601$
