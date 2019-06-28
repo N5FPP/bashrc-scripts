@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Host specific configuration/setup
+
+[ "$PS1" ] &&	echo "Loading host (${HOSTNAME}) specific configuration..."
+
+[ "$PS1" ] &&	source ~/.bash_ssh-agent && sshagent_init
+
+# Assume we have X-windows available
+export DISPLAY=:0
+
+export JAVA_HOME='/c/Program Files/Java/jdk1.8.0_191'
+
+export HOST_PATH=$(mkpath				\
+	$(quote ${HOST_PATH})				\
+	"/c/Program\ Files/Java/jdk1.8.0_191/bin"	\
+	${MINGW_PREFIX:+${MINGW_PREFIX}/bin}		\
+	/local/bin					\
+	/local/eagle					\
+	/local/games/*					\
+	/local/MATLAB/R2016b/bin			\
+	/local/STMicroelectronics/STM32Cube		\
+)
+
+debug HOST_PATH = $(quote ${HOST_PATH})
+
+export POST_PATH=$(mkpath				\
+	/cygdrive/c/Ruby193/bin/			\
+	/cygdrive/c/DevKit-tdm-32/bin/			\
+	!/cygdrive/c/DevKit-tdm-32/mingw/bin/		\
+	/cygdrive/c/QT/4.8.4/bin 			\
+	)
+export LESS=-IN
+
+export SIMAJIN_WORKSPACE="/e/pascal/Simajin\ Workspace"
+
+function proj () {
+	export CDPATH=$(mkpath						\
+		.							\
+		..							\
+		../..							\
+		../../..						\
+		${SIMAJIN_WORKSPACE}/SimajinProjects/${1}/		\
+		${SIMAJIN_WORKSPACE}/SimajinProjects/			\
+		${SIMAJIN_WORKSPACE}/Simajin\ Workspace/		\
+		)
+	cd ${1}
+}
+
+[ -f "${HOME}"/.cargo/bin/rg ] && alias	grep=rg
+
+#alias gem=gem.bat
+#alias rake=rake.bat
+#alias erb=erb.bat
+#alias irb=irb.bat
+#alias rdoc=rdoc.bat
+#alias ri=ri.bat
+#alias rspec=rspec.bat
+#alias cucumber=cucumber.bat
+#alias bundle=bundle.bat
+
+#alias  wdslogdev="w3m https://webdev.sandia.gov/sandia/WebDose/logs/WebDose.log"
+#alias wdslogqual="w3m https://webqual.sandia.gov/sandia/WebDose/logs/WebDose.log"
+#alias wdslogprod="w3m https://webprod.sandia.gov/sandia/WebDose/logs/WebDose.log"
+

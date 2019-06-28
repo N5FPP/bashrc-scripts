@@ -46,3 +46,4 @@ _comp_cd()
 }
 
 complete -o filenames -o nospace -o bashdefault -F _comp_cd cd
+complete -o filenames -o nospace -o bashdefault -F _comp_cd pushd

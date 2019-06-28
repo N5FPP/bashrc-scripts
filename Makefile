@@ -24,7 +24,8 @@ Cygwin_FILES =	$(DESTDIR)/.bash_CYGWIN_NT-6.1 \
 Darwin_FILES =	$(DESTDIR)/.bash_Darwin \
 		$(COMMON_FILES)
 
-HOST_FILES =	$(wildcard .??*$(HOST))
+HOST_FILES =	$(DESTDIR)/.bash_$(HOST) \
+                $(DESTDIR)/.projectrc-$(HOST)
 
 .PHONY : all env $(HOST) $(OS)
 
