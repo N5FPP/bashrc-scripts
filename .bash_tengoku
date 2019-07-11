@@ -47,7 +47,7 @@ function proj () {
 	cd ${1}
 }
 
-[ -f "${HOME}"/.cargo/bin/rg ]; then
+if [ -f "${HOME}"/.cargo/bin/rg ]; then
     alias	grep=rg
     function rpl() { rg -p $* | less -R; }
 fi
