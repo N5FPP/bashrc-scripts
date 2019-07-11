@@ -47,7 +47,10 @@ function proj () {
 	cd ${1}
 }
 
-[ -f "${HOME}"/.cargo/bin/rg ] && alias	grep=rg
+[ -f "${HOME}"/.cargo/bin/rg ]; then
+    alias	grep=rg
+    function rpl() { rg -p $* | less -R; }
+fi
 
 #alias gem=gem.bat
 #alias rake=rake.bat
