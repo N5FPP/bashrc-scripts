@@ -18,6 +18,7 @@ if [ "${PS1}" ] && [ -x /usr/bin/dircolors ]; then
 fi
 
 alias ls='ls --color=auto'
+type exa > /dev/null 2>&1 && alias ls="exa"
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
@@ -37,6 +38,7 @@ alias m=more
 
 alias please='sudo $(fc -nl -1)'
 
+alias dmesg="dmesg --human"
 alias khup="pkill -hup"
 alias md=mkdir
 alias pg="pgrep -lf"
