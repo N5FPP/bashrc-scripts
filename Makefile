@@ -7,7 +7,6 @@ DESTDIR ?= ${HOME}
 
 COMMON_FILES =	$(DESTDIR)/.bash_aliases \
 		$(DESTDIR)/.bash_completion \
-		$(DESTDIR)/.bash_Darwin \
 		$(DESTDIR)/.bash_functions \
 		$(DESTDIR)/.bash_Linux \
 		$(DESTDIR)/.bashrc \
