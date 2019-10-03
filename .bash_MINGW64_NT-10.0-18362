@@ -1,0 +1,24 @@
+# .bash_MINGW64_NT-10.0-2.11.2-x86_64
+
+export PLATFORM_PATH=$(mkpath \
+	"/c/Program\ Files/Java/jre1.8.0_201/bin"	\
+	"/c/Program\ Files/GIMP\ 2/bin"			\
+	"/c/Program\ Files/Git/bin"			\
+	"/e/Program\ Files/Microsoft\ VS\ Code/bin"	\
+	"/e/Program\ Files/scilab-6.0.1/bin"		\
+)
+
+debug PLATFORM_PATH = $(quote ${PLATFORM_PATH})
+
+# Interactive stuff...
+#
+if [ "$PS1" ]; then
+
+  echo "Loading platform (${PLATFORM}) specific configuration..."
+
+  # aliases...
+  #
+  alias      pa="ps auxww"
+  alias     psg="ps auxww | grep -v grep | grep"
+
+fi

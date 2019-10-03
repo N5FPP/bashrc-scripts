@@ -132,10 +132,14 @@ if [ -f ~/.bash_${HOST} ]; then
   source ~/.bash_${HOST}
 fi
 
-# Host type specific BASH aliases and functions...
+# Platform or operating system type specific BASH aliases and functions...
 #
 if [ -f ~/.bash_${PLATFORM} ]; then
   source ~/.bash_${PLATFORM}
+else
+  if [ -f ~/.bash_${OS} ]; then
+    source ~/.bash_${OS}
+  fi
 fi
 
 ##############################################################################
