@@ -1,0 +1,160 @@
+# .projectrc-kasparov
+#------------------------------------------------------------------------------
+
+if [ "${PS1}" ]; then
+  echo "Loading local project configuration for $(hostname)..."
+fi
+
+#------------------------------------------------------------------------------
+# Project support
+
+if [ -z "${MYPROJECT}" ] && [ -f ~/".myproject-${HOST}" ]; then
+  export MYPROJECT=$(cat ~/".myproject-${HOST}")
+fi
+
+if [ "${MYPROJECT}" ]; then
+  export PROJECT_HOME=${MYPROJECT:+${HOME}/Projects/${MYPROJECT}}
+fi
+
+if [ "${PS1}" ]; then
+  echo "Current project:  ${MYPROJECT:-NONE}"
+fi
+
+#------------------------------------------------------------------------------
+# Pybombs setup
+
+PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
+[ -f "${PYBOMBS_PREFIX}/setup_env.sh" ] && source "${PYBOMBS_PREFIX}/setup_env.sh"
+
+#------------------------------------------------------------------------------
+# Paths
+
+# My fundamental path - this stuff at the absolute front fo the path
+
+export MY_PATH=$(mkpath  						\
+	$(quote ${MY_PATH})						\
+	${HOME}/.cargo/bin						\
+	${HOME}/.local/bin						\
+	${HOME}/.scripts/*						\
+)
+
+debug MY_PATH = $(quote ${MY_PATH})
+
+#export HOST_PATH=$(mkpath  						\
+#	$(quote ${HOST_PATH})						\
+#)
+
+# Package Configs
+
+export PKG_CONFIG_PATH=$(mkpath  					\
+	/usr/local/Cellar/libpng12/1.2.54/lib/pkgconfig			\
+	/usr/local/share/pkgconfig					\
+	/usr/local/lib/pkgconfig					\
+	/usr/local/opt/qt5/lib/pkgconfig				\
+	/usr/local/Library/ENV/pkgconfig				\
+	/usr/local/Library/Aliases/pkgconfig				\
+	/opt/X11/lib/pkgconfig						\
+	/opt/X11/share/pkgconfig					\
+	/usr/lib/pkgconfig						\
+)
+
+# Golang
+
+export GOPATH=${HOME}/Go
+export MY_PATH=$(mkpath  						\
+	$(quote ${MY_PATH})						\
+	${GOPATH}/bin							\
+)
+
+debug MY_PATH = $(quote ${MY_PATH})
+
+# Java paths
+
+export JAVA_HOME=$(findpath 						\
+	$(update-java-alternatives -l | cut -c43-)			\
+	/Library/Java/Home						\
+)
+
+if [ "${PS1}" ]; then
+  echo "Java home:  ${JAVA_HOME:-NONE}"
+fi
+
+# Development tools paths
+
+export PROJECT_PATH=$(mkfilepath 					\
+    	${PROJECT_HOME}/rhinocorps/bin          			\
+	${JAVA_HOME}/bin						\
+	/opt/*/bin							\
+	/opt/*								\
+)
+
+#export PROJECT_CLASSPATH=$(mkfilepath 					\
+#)
+
+#export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(mkfilepath 			\
+#	/opt/install/libsdrplay/lib					\
+#)
+
+# Build a CDPATH variable.
+#
+# The 'find' comand returns all directories under current project
+#
+export CDPATH=$(mkpath  						\
+	.                                               		\
+	..                                              		\
+	../..                                           		\
+	../../..                                        		\
+	/e/pascal/SimajinWorkspace/SimajinProjects			\
+	/e/pascal/SimajinWorkspace					\
+	$([ -d "${PROJECT_HOME}" ] &&
+		find "${PROJECT_HOME}" -maxdepth 2 -type d | 		\
+			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
+	$([ -d "${HOME}/Projects" ] &&
+		find "${HOME}/Projects" -maxdepth 1 -type d | 		\
+			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
+	${HOME}/							\
+	${HOME}/Workspaces/						\
+)
+
+
+alias grep="grep --color"
+
+alias ..="cd .."
+alias .2="cd ../.."
+alias .3="cd ../../.."
+alias .4="cd ../../../.."
+
+#------------------------------------------------------------------------------
+# Internet development support
+
+# GIT aliases
+alias gdh="git diff HEAD~1..HEAD"
+
+useproject() {
+  if [ $# -ne 1 ]; then
+    echo 'Usage: useproject {project id}'				1>&2
+  fi
+
+  export MYPROJECT=$1
+
+  exec "${SHELL}"
+}
+
+setproject() {
+  if [ $# -ne 1 ]; then
+    echo 'Usage: setproject {project id}'				1>&2
+  fi
+
+  echo "${1}" > ~/".myproject-${HOST}"
+
+  unset MYPROJECT
+
+  exec "${SHELL}"
+}
+
+pcd() {
+  pushd "${PROJECT_HOME}/${1:+/$1}"
+}
+
+alias cmakeEclipse='cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../'
+
