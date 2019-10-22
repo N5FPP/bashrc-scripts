@@ -318,7 +318,7 @@ if [ "$PS1" ]; then
 #    export GIT_PS1_STATESEPARATOR
     export GIT_PS1_SHOWCOLORHINTS=yes
 
-    case "$(ps -q $PPID -o comm=)" in
+    case "$(ps -p $PPID -o comm=)" in
 	    'st'|'terminator') USE_EMOJI=1;;
 	    *) unset USE_EMOJI;;
     esac

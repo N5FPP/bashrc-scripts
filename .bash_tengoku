@@ -32,7 +32,7 @@ export POST_PATH=$(mkpath				\
 	)
 export LESS=-IN
 
-export SIMAJIN_WORKSPACE="/e/pascal/Simajin\ Workspace"
+export SIMAJIN_WORKSPACE="/e/pascal/SimajinWorkspace"
 
 function proj () {
 	export CDPATH=$(mkpath						\
