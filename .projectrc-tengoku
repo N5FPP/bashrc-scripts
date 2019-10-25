@@ -117,8 +117,8 @@ export CDPATH=$(mkpath  						\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
-	/e/pascal/SimajinWorkspace/*			                \
-	/e/pascal/SimajinWorkspace					\
+	/e/pascal/*/*					                \
+	/e/pascal/*                                                     \
 	$([ -d "${PROJECT_HOME}" ] &&
 		find "${PROJECT_HOME}" -maxdepth 2 -type d | 		\
 			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
@@ -128,7 +128,6 @@ export CDPATH=$(mkpath  						\
 	${HOME}/							\
 	${HOME}/Workspaces/						\
 )
-
 
 alias grep="grep --color"
 

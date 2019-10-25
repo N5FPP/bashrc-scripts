@@ -104,8 +104,6 @@ export CDPATH=$(mkpath  						\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
-	/e/pascal/SimajinWorkspace/SimajinProjects			\
-	/e/pascal/SimajinWorkspace					\
 	$([ -d "${PROJECT_HOME}" ] &&
 		find "${PROJECT_HOME}" -maxdepth 2 -type d | 		\
 			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\

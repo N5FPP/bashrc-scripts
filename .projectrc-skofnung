@@ -42,11 +42,6 @@ export MY_PATH=$(mkpath  						\
 	${HOME}/.local/bin						\
 	${HOME}/.scripts/*						\
 	/opt/install/sdrangel/bin/					\
-	"/e/Program\ Files/nodejs"  					\
-	/e/tools/apache-ant-1.10.5/bin  				\
-	"/c/Program\ Files/Docker Toolbox"  				\
-	/c/Users/pascal/AppData/Local/Microsoft/WindowsApps  		\
-	/c/Users/pascal/AppData/Roaming/npm  				\
 )
 
 debug MY_PATH = $(quote ${MY_PATH})
@@ -117,8 +112,6 @@ export CDPATH=$(mkpath  						\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
-	/e/pascal/SimajinWorkspace/SimajinProjects			\
-	/e/pascal/SimajinWorkspace					\
 	$([ -d "${PROJECT_HOME}" ] &&
 		find "${PROJECT_HOME}" -maxdepth 2 -type d | 		\
 			grep -Ev '/(CVS|[rR]elease|scratch|tmp)') 	\
