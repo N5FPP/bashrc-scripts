@@ -220,14 +220,15 @@ STD="${STD}:                                        \
 
 # My local path within my home directory...
 #
-MY_PATH="${MY_PATH}                                  \
+MY_PATH=$(mkpath                                    \
+    $(quote ${MY_PATH})                              \
     ${HOME}/bin/${PLATFORM}                          \
     ${HOME}/bin                                      \
     ${HOME}/.cargo/bin                               \
     ${HOME}/.local/bin                               \
     ${HOME}/.scripts                                 \
     ${HOME}/.scripts/*                               \
-    "
+    )
 
 debug MY_PATH = $(quote ${MY_PATH})
 debug PLATFORM_PATH = $(quote ${PLATFORM_PATH})
@@ -303,10 +304,12 @@ if [ "$PS1" ]; then
   if [ "${DISPLAY}" ]; then
     TERM=xterm
   else
-    TERM=vt220
+    TERM=screen-256color
   fi
 
-  if [ "$(tput colors)" -gt 0 ]; then
+  if [ "${color_prompt}" = "yes" -o \
+       "$(tput colors)" -gt 0 ]; then
+
     color_prompt=yes
 
 #    export GIT_PS1_HIDE_IF_PWD_IGNORED=yes

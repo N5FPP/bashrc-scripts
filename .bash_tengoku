@@ -9,7 +9,7 @@
 # Assume we have X-windows available
 export DISPLAY=:0
 
-export JAVA_HOME='/c/Program Files/Java/jdk1.8.0_191'
+#export JAVA_HOME='/c/Program Files/Java/jdk1.8.0_191'
 
 export HOST_PATH=$(mkpath				\
 	$(quote ${HOST_PATH})				\
@@ -45,6 +45,25 @@ function proj () {
 		${SIMAJIN_WORKSPACE}/Simajin\ Workspace/		\
 		)
 	cd ${1}
+}
+
+function boaturvy-clean() {
+    [ -d ${SIMAJIN_WORKSPACE} ] && \
+        rm -rfv ${SIMAJIN_WORKSPACE}/SimajinProjects/boaturvy/{,vanguard_test}/output/*
+}
+
+
+function vanguard-convert-pallets () { 
+    [ -d ${SIMAJIN_WORKSPACE} ] && \
+    (   
+        cd ${SIMAJIN_WORKSPACE} && \
+            rg -g \*.atc -il 'C:\\Work\\SimajinProjects' ${SIMAJIN_WORKSPACE}/SimajinProjects/vanguard/palettes/Palettes | \
+                while read palette_file; do
+                    echo Converting $(basename "${palette_file}")...
+                    sed -i.original 's#C:\\Work#E:\\pascal\\SimajinWorkspace#gi' \
+                        "${palette_file}"
+                done
+    )
 }
 
 if [ -f "${HOME}"/.cargo/bin/rg ]; then
