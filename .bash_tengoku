@@ -61,6 +61,20 @@ function vanguard-convert-pallets () {
                 while read palette_file; do
                     echo Converting $(basename "${palette_file}")...
                     sed -i.original 's#C:\\Work#E:\\pascal\\SimajinWorkspace#gi' \
+                        "${palette_file}" && \
+                    git update-index --assume-unchanged ${palette_file}
+                done
+    )
+}
+
+function vanguard-convert-pallets-back () { 
+    [ -d ${SIMAJIN_WORKSPACE} ] && \
+    (   
+        cd ${SIMAJIN_WORKSPACE} && \
+            rg -g \*.atc -il 'E:\\pascal\\SimajinWorkspace' ${SIMAJIN_WORKSPACE}/SimajinProjects/vanguard/palettes/Palettes | \
+                while read palette_file; do
+                    echo Converting $(basename "${palette_file}")...
+                    sed -i.original 's#E:\\pascal\\SimajinWorkspace#C:\\Work#gi' \
                         "${palette_file}"
                 done
     )
