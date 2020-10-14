@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Host specific configuration/setup
+
+[ "$PS1" ] &&	echo "Loading host (${HOSTNAME}) specific configuration..."
+
+[ "$PS1" ] &&	source ~/.bash_ssh-agent && sshagent_init
+
+# Assume we have X-windows available
+export DISPLAY=:0
+
+export JAVA_HOME='/c/Program Files/Java/jdk1.8.0_221/'
+
+export HOST_PATH=$(mkpath				\
+	$(quote ${HOST_PATH})				\
+	$(quote ${JAVA_HOME}/bin)			\
+	${MINGW_PREFIX:+${MINGW_PREFIX}/bin}		\
+	/c/Windows/System32				\
+	/c/local/*					\
+	/c/local/*/bin					\
+)
+
+debug HOST_PATH = $(quote ${HOST_PATH})
+
+export POST_PATH=$(mkpath				\
+	/c/Ruby193/bin/			\
+	/c/DevKit-tdm-32/bin/			\
+	!/c/DevKit-tdm-32/mingw/bin/		\
+	/c/QT/4.8.4/bin 			\
+	)
+export LESS=-IN
+
+if [ -f "${HOME}"/.cargo/bin/rg ]; then
+    alias	grep=rg
+    function rpl() { rg -p $* | less -R; }
+fi
+
+#alias gem=gem.bat
+#alias rake=rake.bat
+#alias erb=erb.bat
+#alias irb=irb.bat
+#alias rdoc=rdoc.bat
+#alias ri=ri.bat
+#alias rspec=rspec.bat
+#alias cucumber=cucumber.bat
+#alias bundle=bundle.bat
+
+#alias  wdslogdev="w3m https://webdev.sandia.gov/sandia/WebDose/logs/WebDose.log"
+#alias wdslogqual="w3m https://webqual.sandia.gov/sandia/WebDose/logs/WebDose.log"
+#alias wdslogprod="w3m https://webprod.sandia.gov/sandia/WebDose/logs/WebDose.log"
+
