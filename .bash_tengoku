@@ -32,7 +32,7 @@ export POST_PATH=$(mkpath				\
 	)
 export LESS=-IN
 
-export SIMAJIN_WORKSPACE="/e/pascal/SimajinWorkspace"
+export SIMAJIN_WORKSPACE="/e/SimajinWork"
 
 function proj () {
 	export CDPATH=$(mkpath						\
@@ -40,6 +40,7 @@ function proj () {
 		..							\
 		../..							\
 		../../..						\
+                /e/                                                     \
 		${SIMAJIN_WORKSPACE}/SimajinProjects/${1}/		\
 		${SIMAJIN_WORKSPACE}/SimajinProjects/			\
 		${SIMAJIN_WORKSPACE}/Simajin\ Workspace/		\
@@ -56,11 +57,13 @@ function boaturvy-clean() {
 function vanguard-convert-pallets () { 
     [ -d ${SIMAJIN_WORKSPACE} ] && \
     (   
+        local PATH_PREFIX=$( echo $SIMAJIN_WORKSPACE | sed -e 's#/\([a-zA-Z]\)#\1:#' -e 's#/#\\\\#g' )
+
         cd ${SIMAJIN_WORKSPACE} && \
             rg -g \*.atc -il 'C:\\Work\\SimajinProjects' ${SIMAJIN_WORKSPACE}/SimajinProjects/vanguard/palettes/Palettes | \
                 while read palette_file; do
                     echo Converting $(basename "${palette_file}")...
-                    sed -i.original 's#C:\\Work#E:\\pascal\\SimajinWorkspace#gi' \
+                    sed -i.original 's#C:\\Work#'${PATH_PREFIX}'#gi' \
                         "${palette_file}" && \
                     git update-index --assume-unchanged ${palette_file}
                 done
@@ -71,10 +74,10 @@ function vanguard-convert-pallets-back () {
     [ -d ${SIMAJIN_WORKSPACE} ] && \
     (   
         cd ${SIMAJIN_WORKSPACE} && \
-            rg -g \*.atc -il 'E:\\pascal\\SimajinWorkspace' ${SIMAJIN_WORKSPACE}/SimajinProjects/vanguard/palettes/Palettes | \
+            rg -g \*.atc -il 'E:\\SimajinWork' ${SIMAJIN_WORKSPACE}/SimajinProjects/vanguard/palettes/Palettes | \
                 while read palette_file; do
                     echo Converting $(basename "${palette_file}")...
-                    sed -i.original 's#E:\\pascal\\SimajinWorkspace#C:\\Work#gi' \
+                    sed -i.original 's#E:\\SimajinWork#C:\\Work#gi' \
                         "${palette_file}"
                 done
     )

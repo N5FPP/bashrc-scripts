@@ -117,12 +117,16 @@ export CDPATH=$(mkpath  						\
 	..                                              		\
 	../..                                           		\
 	../../..                                        		\
-	/e/pascal/SimajinWorkspace                                      \
-	/e/pascal/SimajinWorkspace/*                                    \
+	/e/SimajinWork                                                  \
+	/e/SimajinWork/*                                                \
+        /e/                                                             \
 	${HOME}/							\
 	${HOME}/Workspaces/						\
 	${HOME}/Documents/						\
 )
+
+# Simajin Workspace
+export WORKSPACE=/e/SimajinWork
 
 alias grep="grep --color"
 
