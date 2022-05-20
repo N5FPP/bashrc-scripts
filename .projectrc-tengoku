@@ -24,10 +24,10 @@ if [ "${PS1}" ]; then
 fi
 
 #------------------------------------------------------------------------------
-# Pybombs setup
+# generate-changelog.pl environment variables
 
-PYBOMBS_PREFIX=${HOME}/pybombs/bladeRF
-[ -f "${PYBOMBS_PREFIX}/setup_env.sh" ] && source "${PYBOMBS_PREFIX}/setup_env.sh"
+export GITLAB_CACERT=~/.Rhinocorps-CA.crt
+export GITLAB_TOKEN=w_ssHyoYPYb6Z-QVkdby
 
 #------------------------------------------------------------------------------
 # Paths
@@ -140,6 +140,40 @@ alias .4="cd ../../../.."
 
 # GIT aliases
 alias gdh="git diff HEAD~1..HEAD"
+
+git-refresh () {
+    # Loop through provided paths or anything with a .git directory in it.
+    for project_dir in ${@:-$( fd --hidden --type d --exclude .metadata --exclude localdeps .git --exec dirname )}
+    do
+        echo -e "\nRefreshing ${project_dir}...\n"
+        (
+            cd ${project_dir} \
+                && [ -d .git ] \
+                && git fetch \
+                && git pull
+        )
+    done
+}
+
+gitsum () {
+  git for-each-ref | grep -v refs\/remotes | sort | git hash-object --stdin
+}
+
+gdc () {
+  local COMMIT=${1:-HEAD}
+
+  git diff ${COMMIT}~ ${COMMIT}
+}
+
+simlog () {
+  local LOG_FILE=$( \ls -1t ${WORKSPACE:-/e/SimajinWork}/Simajin/execs/logs/*.log | head -1 )
+  less ${LOG_FILE:-${1}}
+}
+
+simout () {
+  local latest=$( \ls -1t ${WORKSPACE:-/e/SimajinWork}/SimajinProjects/${1:-lone_pine}/output/${2:-Study_Run}/${3:-*.dat} | head -1 )
+  less ${latest} 
+}
 
 useproject() {
   if [ $# -ne 1 ]; then
