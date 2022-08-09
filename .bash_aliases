@@ -18,10 +18,13 @@ if [ "${PS1}" ] && [ -x /usr/bin/dircolors ]; then
 fi
 
 alias ls='ls --color=auto'
-type exa > /dev/null 2>&1 && alias ls="exa"
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 
+type dfrs > /dev/null 2>&1 && alias df="dfrs"
+type exa > /dev/null 2>&1 && alias ls="exa"
+
+export EXA_COLORS="da=1;40"
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # Internet

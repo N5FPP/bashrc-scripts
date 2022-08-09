@@ -371,7 +371,7 @@ if [ "$PS1" ]; then
     export EDITOR=vi
   fi
   export PAGER=less
-  export LESS=iMeFRX
+  export LESS=iMeFRXN
   export LESS_TERMCAP_mb=$'\E[1;31m'     # begin bold
   export LESS_TERMCAP_md=$'\E[1;36m'     # begin blink
   export LESS_TERMCAP_me=$'\E[0m'        # reset bold/blink
@@ -396,6 +396,12 @@ if [ "$PS1" ]; then
 		/sw/info                    \
 		/usr/share/info             \
 	)
+
+  if [[ "$(which rg)" =~ .cargo ]]; then
+    if [ -f ~/.config/ripgrep/ripgrep.cfg ]; then
+      export RIPGREP_CONFIG_PATH=~/.config/ripgrep/ripgrep.cfg
+    fi
+  fi
 
   # BASH aliases...
   #
@@ -428,3 +434,7 @@ export QSYS_ROOTDIR="/local/altera/16.0/quartus/sopc_builder/bin"
 
 # EOF:  .bashrc
 
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/pascal/.sdkman"
+[[ -s "/home/pascal/.sdkman/bin/sdkman-init.sh" ]] && source "/home/pascal/.sdkman/bin/sdkman-init.sh"
