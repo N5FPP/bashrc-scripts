@@ -138,19 +138,34 @@ alias .4="cd ../../../.."
 #------------------------------------------------------------------------------
 # Internet development support
 
+# Update current Simajin workspace Simajin instances with default keys and
+# and properties from the root of the workspace
+alias install-keys="cp ${WORKSPACE}/*.key ${WORKSPACE}/*.properties ${WORKSPACE}/Simajin/execs"
+alias snapshot-keys="cp ${WORKSPACE}/Simajin/execs/{*.key,*.properties} ${WORKSPACE}/"
+
 # GIT aliases
 alias gdh="git diff HEAD~1..HEAD"
 
 git-refresh () {
     # Loop through provided paths or anything with a .git directory in it.
-    for project_dir in ${@:-$( fd --hidden --type d --exclude .metadata --exclude localdeps .git --exec dirname )}
+    for project_dir in ${@:-$( fd                   \
+                                --hidden --type d   \
+                                --exclude .metadata \
+                                --exclude localdeps \
+                                --exclude \*-       \
+                                .git --exec dirname \
+                                    | tee /proc/$$/fd/2 
+                            )}
     do
         echo -e "\nRefreshing ${project_dir}...\n"
         (
             cd ${project_dir} \
-                && [ -d .git ] \
-                && git fetch \
-                && git pull
+                && if [ -z "$( git status --porcelain --untracked-files=no )" ]; then 
+                        git fetch
+                        git pull
+                   else
+                        echo "Pending changes... skipping." >&2
+                   fi
         )
     done
 }

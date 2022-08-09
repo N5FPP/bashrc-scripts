@@ -26,7 +26,7 @@ Darwin_FILES =	$(DESTDIR)/.bash_Darwin \
 HOST_FILES =	$(DESTDIR)/.bash_$(HOST) \
                 $(DESTDIR)/.projectrc-$(HOST)
 
-.PHONY : all env $(HOST) $(OS)
+.PHONY : all compare env $(HOST) $(OS)
 
 #
 # Targets
@@ -44,4 +44,7 @@ env:
 	@echo $(OS)_FILES: $($(OS)_FILES)
 	@echo HOST : $(HOST)
 	@echo HOST_FILES : $(HOST_FILES)
+
+#compare: $($(OS)_FILES) $(HOST_FILES) 
+#	cmp $< `basename $<` && echo $< changed.
 
