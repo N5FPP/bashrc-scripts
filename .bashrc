@@ -340,12 +340,14 @@ if [ "$PS1" ]; then
 
   # Build prompt string for any non-login shell invocations...
   #
+  PROMPT_DIRTRIM=2
+  PS1='\[\033];\u@\h (\w)\007\]'
   case "${EUID}" in
-    0)	PS1="${color_prompt:+\e[0;31m}\u@\h # ${color_prompt:+\e[0m}"
+    0)	PS1="${PS1}${color_prompt:+\e[0;31m}\u@\h # ${color_prompt:+\e[0m}"
         ;;
     *)  ULOCK=$([ "${USE_EMOJI}" ] && [ "${LANG/*./}" = 'UTF-8' ] && echo $'\U1f512' || echo "*")
 	UPROMPT=$([ "${USE_EMOJI}" ] && [ "${LANG/*./}" = 'UTF-8' ] && echo $'\U1F449' || echo ">")
-	PS1="\u@\h ${MYPROJECT:+[${MYPROJECT}] }\$(__git_ps1 ' (%s) ')"
+	PS1="${PS1}\u@\h ${MYPROJECT:+[${MYPROJECT}] }\$(__git_ps1 ' (%s) ')"
         PS1="${PS1}${color_prompt:+\\[\e[1;35m\\]}[\#] ${UPROMPT} "
         PS1="${color_prompt:+\\[\e[1;33m\\]}${PS1}"
         PS1="${SSH_AGENT_PID:+${color_prompt:+\\[\e[1;32m\\]}${ULOCK} }${PS1}"

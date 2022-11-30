@@ -6,6 +6,8 @@
 
 [ "$PS1" ] &&	source ~/.bash_ssh-agent && sshagent_init
 
+eval `keychain --eval --agents ssh pascal@rhinocorps.com`
+
 # Assume we have X-windows available
 export DISPLAY=:0
 
