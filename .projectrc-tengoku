@@ -114,10 +114,10 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(mkfilepath 			\
 # The results are cached in ~/.config/my-cdpath.txt to speed up
 # signon.
 #
-export CDPATH=$(
-    if [ -f ~/.config/my-cdpath.txt ] ; then
-        cat ~/.config/my-cdpath.txt
-    else
+if [ -f ~/.config/my-cdpath.txt ] ; then
+    cat ~/.config/my-cdpath.txt
+else
+    export CDPATH=$(                            \
         mkpath                                  \
             .                                   \
             ..                                  \
@@ -135,9 +135,9 @@ export CDPATH=$(
             /e                                  \
             /s                                  \ 
             /s/intermediates                    \
-        | tee ~/.config/my-cdpath.txt
-    fi
-)
+    )
+    echo $CDPATH | tee ~/.config/my-cdpath.txt
+fi
 
 # Simajin Workspace
 export WORKSPACE=/e/SimajinWork
