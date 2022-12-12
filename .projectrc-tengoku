@@ -110,19 +110,33 @@ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$(mkfilepath 			\
 
 # Build a CDPATH variable.
 #
-# The 'find' comand returns all directories under current project
+# The 'find' comand returns all directories under current project.
+# The results are cached in ~/.config/my-cdpath.txt to speed up
+# signon.
 #
-export CDPATH=$(mkpath  						\
-	.                                               		\
-	..                                              		\
-	../..                                           		\
-	../../..                                        		\
-	/e/SimajinWork                                                  \
-	/e/SimajinWork/*                                                \
-        /e/                                                             \
-	${HOME}/							\
-	${HOME}/Workspaces/						\
-	${HOME}/Documents/						\
+export CDPATH=$(
+    if [ -f ~/.config/my-cdpath.txt ] ; then
+        cat ~/.config/my-cdpath.txt
+    else
+        mkpath                                  \
+            .                                   \
+            ..                                  \
+            ../..                               \
+            ../../..                            \
+            ${HOME}                             \
+            ${HOME}/Documents                   \
+            ${HOME}/Documents/Rhinocorps	\
+            $( ~/.cargo/bin/fd			\
+                    -Hip '.git$'		\
+                    /e/SimajinWork              \
+                    ${HOME}/Workspaces		\
+                    -x realpath {//}/..		\
+                | sort | uniq )                 \
+            /e                                  \
+            /s                                  \ 
+            /s/intermediates                    \
+        | tee ~/.config/my-cdpath.txt
+    fi
 )
 
 # Simajin Workspace
@@ -161,8 +175,9 @@ git-refresh () {
         (
             cd ${project_dir} \
                 && if [ -z "$( git status --porcelain --untracked-files=no )" ]; then 
-                        git fetch
-                        git pull
+                        git switch master \
+                        && git fetch \
+                        && git pull
                    else
                         echo "Pending changes... skipping." >&2
                    fi
@@ -189,6 +204,11 @@ simout () {
   local latest=$( \ls -1t ${WORKSPACE:-/e/SimajinWork}/SimajinProjects/${1:-lone_pine}/output/${2:-Study_Run}/${3:-*.dat} | head -1 )
   less ${latest} 
 }
+
+alias snapshot-keys="cp ${WORKSPACE}/Simajin/execs/{*.key,*.properties} ${WORKSPACE}/"
+
+# GIT aliases
+alias gdh="git diff HEAD~1..HEAD"
 
 useproject() {
   if [ $# -ne 1 ]; then
